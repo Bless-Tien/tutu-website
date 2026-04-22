@@ -1848,7 +1848,13 @@
         }, 2000);
     }
 
-    // ==================== 图片上传 ====================
+    // ==================== 云端照片共享 ====================
+    const IMGBB_API = 'https://api.imgbb.com/1/upload';
+    const IMGBB_KEY = 'd57a9c19f52b88c0c9e83e3e2ec3fbb0';
+    const JSONBIN_API = 'https://api.jsonbin.io/v3';
+    const JSONBIN_KEY = '$2a$10$Z3kL8qF6nN4w.mKJfGJw.uRs5PmLHbEdXQqSKr0c5VQzHxRAeG6eG';
+    const JSONBIN_BIN_ID = 'tutu-photos-shared';
+
     let pendingFile = null;
 
     function triggerUpload() {
@@ -1873,20 +1879,99 @@
         return cuteTitles[Math.floor(Math.random() * cuteTitles.length)];
     }
 
-    function confirmUpload(e) {
+    // 压缩图片为 base64
+    function compressImage(file, maxWidth, quality) {
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    let w = img.width, h = img.height;
+                    if (w > maxWidth) { h = h * maxWidth / w; w = maxWidth; }
+                    canvas.width = w;
+                    canvas.height = h;
+                    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                    resolve(canvas.toDataURL('image/jpeg', quality));
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    // 上传图片到 imgbb
+    async function uploadToImgbb(file) {
+        const base64 = await compressImage(file, 1200, 0.75);
+        const form = new FormData();
+        form.append('key', IMGBB_KEY);
+        form.append('image', base64.split(',')[1]);
+        const resp = await fetch(IMGBB_API, { method: 'POST', body: form });
+        const data = await resp.json();
+        if (data.success) return data.data.url;
+        throw new Error('图片上传失败');
+    }
+
+    // 获取云端照片列表
+    async function fetchCloudPhotos() {
+        try {
+            const resp = await fetch(`${JSONBIN_API}/b/${JSONBIN_BIN_ID}/latest`, {
+                headers: { 'X-Access-Key': JSONBIN_KEY }
+            });
+            if (resp.ok) {
+                const data = await resp.json();
+                return data.record?.photos || [];
+            }
+        } catch(e) {}
+        return [];
+    }
+
+    // 保存照片列表到云端
+    async function saveCloudPhotos(photos) {
+        try {
+            await fetch(`${JSONBIN_API}/b/${JSONBIN_BIN_ID}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Access-Key': JSONBIN_KEY
+                },
+                body: JSON.stringify({ photos })
+            });
+        } catch(e) {}
+    }
+
+    // 确认上传（云端版）
+    async function confirmUpload(e) {
         e.stopPropagation();
         if (!pendingFile) return;
         const caption = document.getElementById('captionText').value.trim() || getRandomTitle();
-        const reader = new FileReader();
-        reader.onload = function(ev) {
-            addPhotoToGallery(ev.target.result, caption);
-        };
-        reader.readAsDataURL(pendingFile);
+        const float = document.getElementById('captionFloat');
+        const uploadBtn = float.querySelector('button');
+        const origText = uploadBtn.innerHTML;
+        uploadBtn.innerHTML = '⏳ 上传中...';
+        uploadBtn.disabled = true;
+
+        try {
+            // 上传图片到图床
+            const imgUrl = await uploadToImgbb(pendingFile);
+            // 添加到云端
+            const photos = await fetchCloudPhotos();
+            photos.unshift({ src: imgUrl, caption, time: Date.now() });
+            if (photos.length > 50) photos.length = 50;
+            await saveCloudPhotos(photos);
+            // 显示在页面
+            addPhotoToGallery(imgUrl, caption);
+            showToast('📸 上传成功！所有人都能看到啦～');
+        } catch(err) {
+            showToast('❌ 上传失败，请重试');
+        }
+
         pendingFile = null;
         document.getElementById('captionText').value = '';
-        document.getElementById('captionFloat').classList.remove('show');
+        float.classList.remove('show');
         document.getElementById('fileInput').value = '';
-        showToast('📸 上传成功！新照片已添加到相册～');
+        uploadBtn.innerHTML = origText;
+        uploadBtn.disabled = false;
     }
 
     function showCaptionFloat() {
@@ -1935,18 +2020,12 @@
         return cuteDescs[Math.floor(Math.random() * cuteDescs.length)];
     }
 
-    // 在上传卡片之前插入照片到相册网格
+    // 在上传卡片之前插入照片到相册网格（云端版）
     function addPhotoToGallery(src, caption) {
         const albumGrid = document.getElementById('galleryGrid');
         const addCard = document.getElementById('addPhotoCard');
         const albumItem = createAlbumPhotoEl(src, caption);
         albumGrid.insertBefore(albumItem, addCard);
-
-        // 保存到localStorage
-        const photos = JSON.parse(localStorage.getItem('tutuPhotos') || '[]');
-        photos.unshift({ src, caption });
-        if (photos.length > 20) photos.pop();
-        localStorage.setItem('tutuPhotos', JSON.stringify(photos));
     }
 
     // 创建相册照片元素
@@ -1970,12 +2049,6 @@
         const imgEl = photoEl.querySelector('img');
         const imgSrc = imgEl ? imgEl.src : '';
         showDeleteConfirm('确定要删除这张照片吗？', () => {
-            const photos = JSON.parse(localStorage.getItem('tutuPhotos') || '[]');
-            const idx = photos.findIndex(p => p.src === imgSrc);
-            if (idx !== -1) {
-                photos.splice(idx, 1);
-                localStorage.setItem('tutuPhotos', JSON.stringify(photos));
-            }
             photoEl.classList.add('deleting');
             setTimeout(() => photoEl.remove(), 400);
             showToast('🗑️ 照片已删除');
@@ -2087,9 +2160,9 @@
         });
     }
 
-    // 加载已保存的照片（插入到上传卡片之前）
-    function loadSavedPhotos() {
-        const photos = JSON.parse(localStorage.getItem('tutuPhotos') || '[]');
+    // 从云端加载所有用户上传的照片
+    async function loadSavedPhotos() {
+        const photos = await fetchCloudPhotos();
         const albumGrid = document.getElementById('galleryGrid');
         const addCard = document.getElementById('addPhotoCard');
         photos.forEach(photo => {
