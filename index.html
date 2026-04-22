@@ -1612,6 +1612,160 @@
             transition: color 0.2s;
         }
         .user-bar .logout-btn:hover { color: var(--coral); }
+
+        /* ========== 签到按钮 ========== */
+        .checkin-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 14px;
+            border-radius: 50px;
+            border: 2px solid #FFD699;
+            background: linear-gradient(135deg, rgba(255,249,235,0.9), rgba(255,236,179,0.7));
+            color: var(--deep-orange);
+            font-size: 13px;
+            font-weight: 600;
+            font-family: 'Noto Sans SC', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            position: relative;
+            overflow: hidden;
+        }
+        .checkin-btn:hover {
+            border-color: var(--orange);
+            background: linear-gradient(135deg, rgba(255,236,179,0.9), rgba(255,214,153,0.8));
+            transform: translateY(-2px);
+            box-shadow: 0 4px 14px rgba(255,159,67,0.2);
+        }
+        .checkin-btn:active {
+            transform: scale(0.95);
+        }
+        .checkin-btn.checked {
+            background: linear-gradient(135deg, #E8F8F0, #D4F5E9);
+            border-color: #A8E6CF;
+            color: #059669;
+            cursor: default;
+        }
+        .checkin-btn.checked:hover {
+            transform: none;
+            box-shadow: none;
+        }
+        .checkin-btn .checkin-icon {
+            font-size: 16px;
+            transition: transform 0.3s ease;
+        }
+        .checkin-btn:not(.checked):hover .checkin-icon {
+            transform: scale(1.2) rotate(-10deg);
+        }
+        .checkin-btn .checkin-days {
+            font-size: 11px;
+            background: rgba(255,159,67,0.15);
+            padding: 1px 6px;
+            border-radius: 10px;
+            font-weight: 500;
+        }
+        .checkin-btn.checked .checkin-days {
+            background: rgba(5,150,105,0.1);
+        }
+
+        /* 签到成功特效 */
+        .checkin-particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            font-size: 24px;
+            animation: checkinFly 1.2s ease-out forwards;
+        }
+        @keyframes checkinFly {
+            0% { opacity: 1; transform: translate(0, 0) scale(1) rotate(0deg); }
+            50% { opacity: 1; }
+            100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(0.3) rotate(var(--rot)); }
+        }
+        .checkin-burst {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,159,67,0.4), rgba(255,107,107,0.1), transparent);
+            animation: burstWave 0.8s ease-out forwards;
+        }
+        @keyframes burstWave {
+            0% { transform: translate(-50%, -50%) scale(0.2); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(3); opacity: 0; }
+        }
+
+        /* 签到成功弹窗 */
+        .checkin-success-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.3);
+            z-index: 4000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.2s ease;
+        }
+        .checkin-success-card {
+            background: white;
+            border-radius: 24px;
+            padding: 36px 44px;
+            text-align: center;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+            border: 2px solid rgba(255,159,67,0.15);
+            animation: popupIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        .checkin-success-card .checkin-emoji {
+            font-size: 56px;
+            margin-bottom: 12px;
+            animation: checkinEmojiBounce 0.6s ease;
+        }
+        @keyframes checkinEmojiBounce {
+            0% { transform: scale(0) rotate(-20deg); }
+            50% { transform: scale(1.3) rotate(10deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+        .checkin-success-card h3 {
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 22px;
+            color: var(--deep-orange);
+            margin-bottom: 6px;
+        }
+        .checkin-success-card p {
+            font-size: 14px;
+            color: var(--warm-brown);
+            margin-bottom: 18px;
+        }
+        .checkin-success-card .streak-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 20px;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #FFF3E0, #FFE0B2);
+            border: 2px solid #FFD699;
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 16px;
+            color: var(--deep-orange);
+            margin-bottom: 18px;
+        }
+        .checkin-success-card button {
+            padding: 10px 32px;
+            border-radius: 50px;
+            border: none;
+            background: linear-gradient(135deg, var(--orange), var(--deep-orange));
+            color: white;
+            font-size: 15px;
+            font-family: 'Noto Sans SC', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .checkin-success-card button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 16px rgba(255,159,67,0.3);
+        }
         .nav-auth-btn {
             background: linear-gradient(135deg, var(--orange), var(--deep-orange));
             color: white !important;
@@ -2827,11 +2981,17 @@
             const initial = currentUser.name.charAt(0).toUpperCase();
             navBtn.outerHTML = `
                 <div class="user-bar" id="userBar">
+                    <button class="checkin-btn" id="checkinBtn" onclick="handleCheckin(event)">
+                        <span class="checkin-icon">🐾</span>
+                        <span id="checkinText">签到</span>
+                        <span class="checkin-days" id="checkinDays">0天</span>
+                    </button>
                     <div class="user-avatar">${initial}</div>
                     <span class="user-name">${currentUser.name}</span>
                     <button class="logout-btn" onclick="handleLogout()">退出</button>
                 </div>
             `;
+            loadCheckinStatus();
         } else {
             const bar = document.getElementById('userBar');
             if (bar) {
@@ -2860,6 +3020,210 @@
         } catch(e) {}
     }
     checkSession();
+
+    // ==================== 每日签到系统 ====================
+    const CHECKIN_TABLE = 'check_ins';
+
+    // 获取今天的日期字符串 (YYYY-MM-DD)
+    function getTodayStr() {
+        const d = new Date();
+        return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    }
+
+    // 加载签到状态
+    async function loadCheckinStatus() {
+        if (!currentUser) return;
+        try {
+            const { data, error } = await sb
+                .from(CHECKIN_TABLE)
+                .select('*')
+                .eq('user_id', currentUser.id)
+                .single();
+
+            if (error && error.code !== 'PGRST116') {
+                console.log('加载签到状态失败:', error);
+                return;
+            }
+
+            const btn = document.getElementById('checkinBtn');
+            const textEl = document.getElementById('checkinText');
+            const daysEl = document.getElementById('checkinDays');
+            if (!btn) return;
+
+            if (data) {
+                const totalDays = data.total_days || 0;
+                const lastDate = data.last_checkin || '';
+                const today = getTodayStr();
+
+                daysEl.textContent = totalDays + '天';
+
+                if (lastDate === today) {
+                    // 今天已经签到
+                    btn.classList.add('checked');
+                    textEl.textContent = '已签到';
+                    btn.querySelector('.checkin-icon').textContent = '✅';
+                } else {
+                    textEl.textContent = '签到';
+                    btn.querySelector('.checkin-icon').textContent = '🐾';
+                }
+            } else {
+                daysEl.textContent = '0天';
+                textEl.textContent = '签到';
+                btn.querySelector('.checkin-icon').textContent = '🐾';
+            }
+        } catch(e) {
+            console.log('签到状态加载异常:', e);
+        }
+    }
+
+    // 执行签到
+    async function handleCheckin(e) {
+        e.stopPropagation();
+        if (!currentUser) return;
+
+        const btn = document.getElementById('checkinBtn');
+        if (!btn || btn.classList.contains('checked')) return;
+
+        try {
+            // 先检查今天的签到状态
+            const { data: existing } = await sb
+                .from(CHECKIN_TABLE)
+                .select('*')
+                .eq('user_id', currentUser.id)
+                .single();
+
+            const today = getTodayStr();
+
+            if (existing && existing.last_checkin === today) {
+                showToast('🐱 今天已经签到过啦～');
+                return;
+            }
+
+            let newDays = 1;
+            if (existing) {
+                // 计算连续签到
+                const last = new Date(existing.last_checkin);
+                const now = new Date(today);
+                const diffDays = Math.round((now - last) / 86400000);
+                if (diffDays === 1) {
+                    newDays = (existing.total_days || 0) + 1;
+                } else if (diffDays > 1) {
+                    newDays = 1; // 断签，重新计数
+                } else {
+                    newDays = existing.total_days || 1;
+                }
+            }
+
+            // Upsert 签到记录
+            const { error } = await sb
+                .from(CHECKIN_TABLE)
+                .upsert({
+                    user_id: currentUser.id,
+                    user_name: currentUser.name,
+                    last_checkin: today,
+                    total_days: newDays
+                }, { onConflict: 'user_id' });
+
+            if (error) {
+                // 表可能不存在，提示用户创建
+                if (error.message && error.message.includes('does not exist')) {
+                    showToast('⚠️ 签到表未创建，请联系管理员');
+                    return;
+                }
+                throw error;
+            }
+
+            // 更新按钮状态
+            btn.classList.add('checked');
+            document.getElementById('checkinText').textContent = '已签到';
+            btn.querySelector('.checkin-icon').textContent = '✅';
+            document.getElementById('checkinDays').textContent = newDays + '天';
+
+            // 触发签到特效
+            spawnCheckinParticles(e.clientX, e.clientY);
+            spawnCheckinBurst(e.clientX, e.clientY);
+
+            // 显示签到成功弹窗
+            showCheckinSuccess(newDays);
+
+        } catch(err) {
+            console.error('签到失败:', err);
+            showToast('❌ 签到失败，请重试');
+        }
+    }
+
+    // 签到成功弹窗
+    function showCheckinSuccess(days) {
+        const messages = [
+            '突突给你盖章啦～',
+            '今日份的可爱已送达！',
+            '签到成功，突突很开心！',
+            '连续签到，突突越来越爱你！',
+            '坚持签到，突突会给你小鱼干！',
+        ];
+        const streakMsgs = days >= 30 ? '🏆 你是突突的超级粉丝！' :
+                           days >= 7 ? '🌟 连续一周啦，太棒了！' :
+                           days >= 3 ? '🔥 连续签到中，保持住！' : '';
+
+        const msg = messages[Math.floor(Math.random() * messages.length)];
+        const emoji = days >= 30 ? '👑' : days >= 7 ? '🎉' : days >= 3 ? '⭐' : '🐾';
+
+        const overlay = document.createElement('div');
+        overlay.className = 'checkin-success-overlay';
+        overlay.onclick = () => overlay.remove();
+        overlay.innerHTML = `
+            <div class="checkin-success-card" onclick="event.stopPropagation()">
+                <div class="checkin-emoji">${emoji}</div>
+                <h3>签到成功！</h3>
+                <p>${msg}</p>
+                <div class="streak-badge">🔥 已连续签到 ${days} 天</div>
+                ${streakMsgs ? `<p style="color:var(--deep-orange);font-weight:600;font-size:15px;margin-bottom:14px;">${streakMsgs}</p>` : ''}
+                <button onclick="this.closest('.checkin-success-overlay').remove()">好的～</button>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+
+        // 3秒后自动关闭
+        setTimeout(() => {
+            if (overlay.parentElement) {
+                overlay.style.opacity = '0';
+                overlay.style.transition = 'opacity 0.3s';
+                setTimeout(() => overlay.remove(), 300);
+            }
+        }, 3000);
+    }
+
+    // 签到粒子特效
+    function spawnCheckinParticles(x, y) {
+        const particles = ['🐾', '✨', '💕', '⭐', '🌸', '🐱', '💖', '🌟'];
+        const count = 12;
+        for (let i = 0; i < count; i++) {
+            const p = document.createElement('div');
+            p.className = 'checkin-particle';
+            p.textContent = particles[Math.floor(Math.random() * particles.length)];
+            const angle = (Math.PI * 2 / count) * i + (Math.random() - 0.5) * 0.5;
+            const dist = 60 + Math.random() * 80;
+            p.style.left = x + 'px';
+            p.style.top = y + 'px';
+            p.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
+            p.style.setProperty('--ty', Math.sin(angle) * dist - 40 + 'px');
+            p.style.setProperty('--rot', (Math.random() * 360 - 180) + 'deg');
+            p.style.fontSize = (18 + Math.random() * 14) + 'px';
+            p.style.animationDelay = (Math.random() * 0.15) + 's';
+            document.body.appendChild(p);
+            setTimeout(() => p.remove(), 1400);
+        }
+    }
+
+    // 签到冲击波特效
+    function spawnCheckinBurst(x, y) {
+        const burst = document.createElement('div');
+        burst.className = 'checkin-burst';
+        burst.style.left = x + 'px';
+        burst.style.top = y + 'px';
+        document.body.appendChild(burst);
+        setTimeout(() => burst.remove(), 900);
+    }
 
     // ==================== 云端照片系统（Supabase） ====================
     let pendingFile = null;
