@@ -1288,6 +1288,166 @@
         .toast.show {
             transform: translateX(-50%) translateY(0);
         }
+
+        /* ========== 登录/注册弹窗 ========== */
+        .auth-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(8px);
+            z-index: 3000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+        .auth-overlay.show { display: flex; }
+
+        .auth-modal {
+            background: white;
+            border-radius: 28px;
+            padding: 40px 36px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 16px 48px rgba(0,0,0,0.2);
+            border: 2px solid rgba(255,159,67,0.15);
+            animation: popupIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            position: relative;
+        }
+        .auth-modal .close-auth {
+            position: absolute;
+            top: 16px; right: 20px;
+            background: none; border: none;
+            font-size: 22px; cursor: pointer;
+            color: #ccc;
+            transition: color 0.2s;
+        }
+        .auth-modal .close-auth:hover { color: #999; }
+
+        .auth-modal .auth-icon { font-size: 56px; margin-bottom: 12px; }
+        .auth-modal h2 {
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 26px;
+            color: var(--deep-orange);
+            margin-bottom: 6px;
+        }
+        .auth-modal .auth-sub {
+            font-size: 13px; color: var(--warm-brown);
+            margin-bottom: 24px;
+        }
+        .auth-modal .auth-input-group {
+            text-align: left; margin-bottom: 16px;
+        }
+        .auth-modal label {
+            display: block;
+            font-size: 13px; font-weight: 600;
+            color: var(--warm-brown);
+            margin-bottom: 6px;
+        }
+        .auth-modal input[type="text"],
+        .auth-modal input[type="email"],
+        .auth-modal input[type="password"] {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #FFE4B8;
+            border-radius: 14px;
+            font-size: 15px;
+            font-family: 'Noto Sans SC', sans-serif;
+            color: var(--dark-brown);
+            outline: none;
+            transition: border-color 0.3s;
+            background: var(--cream);
+        }
+        .auth-modal input:focus { border-color: var(--orange); }
+        .auth-modal input::placeholder { color: #ccc; }
+
+        .auth-modal .auth-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(135deg, var(--orange), var(--deep-orange));
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: 'ZCOOL KuaiLe', cursive;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 8px;
+        }
+        .auth-modal .auth-btn:hover { transform: scale(1.03); box-shadow: 0 4px 16px rgba(255,159,67,0.3); }
+        .auth-modal .auth-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+        .auth-modal .auth-switch {
+            margin-top: 18px;
+            font-size: 14px; color: var(--warm-brown);
+        }
+        .auth-modal .auth-switch a {
+            color: var(--deep-orange);
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .auth-modal .auth-switch a:hover { text-decoration: underline; }
+
+        .auth-modal .auth-error {
+            color: #FF6B6B;
+            font-size: 13px;
+            margin-top: 8px;
+            min-height: 18px;
+        }
+
+        /* 用户状态栏 */
+        .user-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .user-bar .user-avatar {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--orange), var(--pink));
+            display: flex; align-items: center; justify-content: center;
+            font-size: 16px; color: white;
+            border: 2px solid var(--soft-orange);
+        }
+        .user-bar .user-name {
+            font-size: 14px;
+            color: var(--warm-brown);
+            font-weight: 500;
+            max-width: 80px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .user-bar .logout-btn {
+            background: none; border: none;
+            font-size: 13px; cursor: pointer;
+            color: #999;
+            transition: color 0.2s;
+        }
+        .user-bar .logout-btn:hover { color: var(--coral); }
+        .nav-auth-btn {
+            background: linear-gradient(135deg, var(--orange), var(--deep-orange));
+            color: white !important;
+            border: none !important;
+            padding: 6px 18px !important;
+            border-radius: 50px !important;
+            font-weight: 600 !important;
+            transition: all 0.3s ease !important;
+        }
+        .nav-auth-btn:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 4px 12px rgba(255,159,67,0.3) !important;
+            border-color: transparent !important;
+            background: linear-gradient(135deg, var(--deep-orange), var(--orange)) !important;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
     </style>
 </head>
 <body>
@@ -1313,6 +1473,51 @@
 <!-- Toast -->
 <div class="toast" id="toast"></div>
 
+<!-- 登录/注册弹窗 -->
+<div class="auth-overlay" id="authOverlay" onclick="if(event.target===this)closeAuth()">
+    <div class="auth-modal">
+        <button class="close-auth" onclick="closeAuth()">✕</button>
+        <!-- 登录表单 -->
+        <div id="loginForm">
+            <div class="auth-icon">🐱</div>
+            <h2>欢迎回来喵～</h2>
+            <p class="auth-sub">登录突突的小窝，分享你的照片</p>
+            <div class="auth-input-group">
+                <label>📧 邮箱</label>
+                <input type="email" id="loginEmail" placeholder="请输入邮箱">
+            </div>
+            <div class="auth-input-group">
+                <label>🔑 密码</label>
+                <input type="password" id="loginPassword" placeholder="请输入密码">
+            </div>
+            <button class="auth-btn" id="loginBtn" onclick="handleLogin()">登 录</button>
+            <div class="auth-error" id="loginError"></div>
+            <div class="auth-switch">还没有账号？<a onclick="switchToRegister()">立即注册</a></div>
+        </div>
+        <!-- 注册表单 -->
+        <div id="registerForm" style="display:none;">
+            <div class="auth-icon">🐾</div>
+            <h2>加入突突家族！</h2>
+            <p class="auth-sub">注册账号，上传你的猫咪照片</p>
+            <div class="auth-input-group">
+                <label>😊 昵称</label>
+                <input type="text" id="regName" placeholder="给自己取个可爱的名字">
+            </div>
+            <div class="auth-input-group">
+                <label>📧 邮箱</label>
+                <input type="email" id="regEmail" placeholder="请输入邮箱">
+            </div>
+            <div class="auth-input-group">
+                <label>🔑 密码</label>
+                <input type="password" id="regPassword" placeholder="至少6位密码">
+            </div>
+            <button class="auth-btn" id="regBtn" onclick="handleRegister()">注 册</button>
+            <div class="auth-error" id="regError"></div>
+            <div class="auth-switch">已有账号？<a onclick="switchToLogin()">去登录</a></div>
+        </div>
+    </div>
+</div>
+
 <!-- 导航栏 -->
 <nav class="navbar" id="navbar">
     <div class="logo">🐱 突突的小窝</div>
@@ -1320,7 +1525,7 @@
         <li><a href="#about">关于突突</a></li>
         <li><a href="#interact">互动</a></li>
         <li><a href="#gallery">相册</a></li>
-
+        <li><a class="nav-auth-btn" id="navAuthBtn" href="javascript:void(0)" onclick="openAuth()">登录</a></li>
     </ul>
     <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
 </nav>
@@ -1633,7 +1838,15 @@
 <!-- 回到顶部 -->
 <button class="back-to-top" id="backToTop" onclick="scrollToTop()">🐱</button>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+    // ==================== Supabase 配置 ====================
+    const SUPABASE_URL = 'https://dfwtbcyojyoixbgvvrjb.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRmd3RiY3lvanlvaXhiZ3Z2cmpiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY3NzUzNTksImV4cCI6MjA5MjM1MTM1OX0.QENCB7xoBvc-R3lruNk6qDhJ-CVEEvXCBwPfS2fhLfg';
+    const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    let currentUser = null; // { email, name, id }
+
     // ==================== 年龄计算 ====================
     function calcAge() {
         const birth = new Date(2025, 5, 1);
@@ -1678,7 +1891,7 @@
     function animateCounter(id) {
         const counter = document.getElementById(id).parentElement;
         counter.classList.remove('bump');
-        void counter.offsetWidth; // 触发 reflow
+        void counter.offsetWidth;
         counter.classList.add('bump');
         setTimeout(() => counter.classList.remove('bump'), 400);
     }
@@ -1697,10 +1910,8 @@
             { emoji: '😋', text: '碗空了！还不快续上！', sub: '突突的饭桶属性发动' },
             { emoji: '😸', text: '喵呜～今天也是被投喂的幸福猫！', sub: '突突打饱嗝中' },
         ];
-        // 卡片震动反馈
         shakeCard(e.currentTarget);
         spawnParticles(e, emojis, ['#FF9F43', '#FFD699', '#FF6B6B']);
-        // 投喂时额外生成食物掉落效果
         for (let i = 0; i < 3; i++) {
             setTimeout(() => spawnFoodDrop(e), i * 200);
         }
@@ -1723,7 +1934,6 @@
         ];
         shakeCard(e.currentTarget);
         spawnParticles(e, emojis, ['#98FB98', '#D1FAE5', '#FFD699']);
-        // 铲屎时额外产生星星闪耀效果
         for (let i = 0; i < 4; i++) {
             setTimeout(() => spawnSparkle(e), i * 180);
         }
@@ -1746,11 +1956,9 @@
         ];
         shakeCard(e.currentTarget);
         spawnParticles(e, emojis, ['#FFB6C1', '#FF69B4', '#FF9F43', '#FFD699']);
-        // 额外的爱心飘散效果
         for (let i = 0; i < 5; i++) {
             setTimeout(() => spawnHeart(e), i * 150);
         }
-        // 抚摸时额外产生呼噜震动效果
         purrEffect(e.currentTarget);
         showCatResponse(texts[Math.floor(Math.random() * texts.length)]);
     }
@@ -1761,7 +1969,6 @@
         const rect = e.currentTarget.getBoundingClientRect();
         const cx = rect.left + rect.width / 2;
         const cy = rect.top + rect.height / 2;
-
         for (let i = 0; i < 15; i++) {
             const particle = document.createElement('div');
             particle.className = 'effect-particle';
@@ -1775,7 +1982,6 @@
         }
     }
 
-    // 爱心飘散
     function spawnHeart(e) {
         const rect = e.currentTarget.getBoundingClientRect();
         const heart = document.createElement('div');
@@ -1786,7 +1992,6 @@
         setTimeout(() => heart.remove(), 2000);
     }
 
-    // 食物掉落效果（投喂专用）
     function spawnFoodDrop(e) {
         const rect = e.currentTarget.getBoundingClientRect();
         const foods = ['🐟', '🥫', '🍖', '🍗', '🧶', '🥩', '🍚'];
@@ -1803,7 +2008,6 @@
         setTimeout(() => food.remove(), 1200);
     }
 
-    // 星星闪耀效果（铲屎专用）
     function spawnSparkle(e) {
         const rect = e.currentTarget.getBoundingClientRect();
         const sparkle = document.createElement('div');
@@ -1820,44 +2024,173 @@
         setTimeout(() => sparkle.remove(), 1000);
     }
 
-    // 卡片震动效果
     function shakeCard(card) {
         card.style.animation = 'cardShake 0.5s ease';
         setTimeout(() => card.style.animation = '', 500);
     }
 
-    // 呼噜震动效果（抚摸专用）
     function purrEffect(card) {
         card.classList.add('purring');
         setTimeout(() => card.classList.remove('purring'), 2000);
     }
 
-    // 猫咪回应弹窗
     function showCatResponse(data) {
         const existing = document.querySelector('.cat-response');
         if (existing) existing.remove();
-
         const popup = document.createElement('div');
         popup.className = 'cat-response';
         popup.innerHTML = `<div class="emoji">${data.emoji}</div><div class="text">${data.text}</div><div class="sub">${data.sub}</div>`;
         document.body.appendChild(popup);
-
         setTimeout(() => {
             popup.style.animation = 'popupOut 0.3s ease forwards';
             setTimeout(() => popup.remove(), 300);
         }, 2000);
     }
 
-    // ==================== 云端照片共享（无需密钥） ====================
-    // 上传照片：imgbb 图床 → 打开 GitHub Issue 页面提交（无需 Token）
-    // 读取照片：从公开仓库 Issues 中读取（无需 Token）
-    const GITHUB_API = 'https://api.github.com/repos/Bless-Tien/tutu-website';
-    const IMGBB_API = 'https://api.imgbb.com/1/upload';
-    const IMGBB_KEY = 'd57a9c19f52b88c0c9e83e3e2ec3fbb0';
+    // ==================== 登录注册系统 ====================
+    function openAuth() {
+        document.getElementById('authOverlay').classList.add('show');
+        switchToLogin();
+    }
 
+    function closeAuth() {
+        document.getElementById('authOverlay').classList.remove('show');
+    }
+
+    function switchToLogin() {
+        document.getElementById('loginForm').style.display = 'block';
+        document.getElementById('registerForm').style.display = 'none';
+        document.getElementById('loginError').textContent = '';
+        document.getElementById('regError').textContent = '';
+    }
+
+    function switchToRegister() {
+        document.getElementById('loginForm').style.display = 'none';
+        document.getElementById('registerForm').style.display = 'block';
+        document.getElementById('loginError').textContent = '';
+        document.getElementById('regError').textContent = '';
+    }
+
+    async function handleLogin() {
+        const email = document.getElementById('loginEmail').value.trim();
+        const password = document.getElementById('loginPassword').value;
+        const errEl = document.getElementById('loginError');
+        const btn = document.getElementById('loginBtn');
+        if (!email || !password) { errEl.textContent = '请填写邮箱和密码'; return; }
+        btn.disabled = true; btn.textContent = '登录中...'; errEl.textContent = '';
+        try {
+            const { data, error } = await sb.auth.signInWithPassword({ email, password });
+            if (error) throw error;
+            currentUser = { email: data.user.email, name: data.user.user_metadata?.nickname || email.split('@')[0], id: data.user.id };
+            localStorage.setItem('tutuUser', JSON.stringify(currentUser));
+            updateAuthUI();
+            closeAuth();
+            showToast('🐱 欢迎回来，' + currentUser.name + '！');
+        } catch(e) {
+            errEl.textContent = e.message === 'Invalid login credentials' ? '邮箱或密码错误' : e.message;
+        }
+        btn.disabled = false; btn.textContent = '登 录';
+    }
+
+    async function handleRegister() {
+        const name = document.getElementById('regName').value.trim();
+        const email = document.getElementById('regEmail').value.trim();
+        const password = document.getElementById('regPassword').value;
+        const errEl = document.getElementById('regError');
+        const btn = document.getElementById('regBtn');
+        if (!name || !email || !password) { errEl.textContent = '请填写所有信息'; return; }
+        if (password.length < 6) { errEl.textContent = '密码至少6位'; return; }
+        btn.disabled = true; btn.textContent = '注册中...'; errEl.textContent = '';
+        try {
+            const { data, error } = await sb.auth.signUp({
+                email, password,
+                options: { data: { nickname: name } }
+            });
+            if (error) throw error;
+            if (data.user && !data.session) {
+                errEl.textContent = '';
+                document.getElementById('registerForm').innerHTML = `
+                    <div class="auth-icon">📧</div>
+                    <h2>注册成功！</h2>
+                    <p class="auth-sub">请去你的邮箱查看验证邮件，点击里面的链接激活账号，然后回来登录～</p>
+                    <button class="auth-btn" onclick="switchToLogin();restoreRegForm();">去登录</button>
+                `;
+            } else if (data.session) {
+                currentUser = { email: data.user.email, name: name, id: data.user.id };
+                localStorage.setItem('tutuUser', JSON.stringify(currentUser));
+                updateAuthUI();
+                closeAuth();
+                showToast('🎉 注册成功！欢迎，' + name + '！');
+            }
+        } catch(e) {
+            errEl.textContent = e.message.includes('already registered') ? '这个邮箱已经注册过了' : e.message;
+        }
+        btn.disabled = false; btn.textContent = '注 册';
+    }
+
+    function restoreRegForm() {
+        document.getElementById('registerForm').innerHTML = `
+            <div class="auth-icon">🐾</div>
+            <h2>加入突突家族！</h2>
+            <p class="auth-sub">注册账号，上传你的猫咪照片</p>
+            <div class="auth-input-group"><label>😊 昵称</label><input type="text" id="regName" placeholder="给自己取个可爱的名字"></div>
+            <div class="auth-input-group"><label>📧 邮箱</label><input type="email" id="regEmail" placeholder="请输入邮箱"></div>
+            <div class="auth-input-group"><label>🔑 密码</label><input type="password" id="regPassword" placeholder="至少6位密码"></div>
+            <button class="auth-btn" id="regBtn" onclick="handleRegister()">注 册</button>
+            <div class="auth-error" id="regError"></div>
+            <div class="auth-switch">已有账号？<a onclick="switchToLogin()">去登录</a></div>
+        `;
+    }
+
+    function updateAuthUI() {
+        const navBtn = document.getElementById('navAuthBtn');
+        if (currentUser) {
+            const initial = currentUser.name.charAt(0).toUpperCase();
+            navBtn.outerHTML = `
+                <div class="user-bar" id="userBar">
+                    <div class="user-avatar">${initial}</div>
+                    <span class="user-name">${currentUser.name}</span>
+                    <button class="logout-btn" onclick="handleLogout()">退出</button>
+                </div>
+            `;
+        } else {
+            const bar = document.getElementById('userBar');
+            if (bar) {
+                bar.outerHTML = `<a class="nav-auth-btn" id="navAuthBtn" href="javascript:void(0)" onclick="openAuth()">登录</a>`;
+            }
+        }
+    }
+
+    async function handleLogout() {
+        await sb.auth.signOut();
+        currentUser = null;
+        localStorage.removeItem('tutuUser');
+        updateAuthUI();
+        showToast('👋 已退出登录');
+    }
+
+    // 检查已登录状态
+    async function checkSession() {
+        try {
+            const { data: { session } } = await sb.auth.getSession();
+            if (session) {
+                currentUser = { email: session.user.email, name: session.user.user_metadata?.nickname || session.user.email.split('@')[0], id: session.user.id };
+                localStorage.setItem('tutuUser', JSON.stringify(currentUser));
+                updateAuthUI();
+            }
+        } catch(e) {}
+    }
+    checkSession();
+
+    // ==================== 云端照片系统（Supabase） ====================
     let pendingFile = null;
 
     function triggerUpload() {
+        if (!currentUser) {
+            showToast('🐱 请先登录再上传照片哦～');
+            openAuth();
+            return;
+        }
         document.getElementById('fileInput').click();
     }
 
@@ -1900,48 +2233,7 @@
         });
     }
 
-    // 上传图片到 imgbb（免费图床）
-    async function uploadToImgbb(file) {
-        const base64 = await compressImage(file, 1200, 0.75);
-        const form = new FormData();
-        form.append('key', IMGBB_KEY);
-        form.append('image', base64.split(',')[1]);
-        const resp = await fetch(IMGBB_API, { method: 'POST', body: form });
-        const data = await resp.json();
-        if (data.success) return data.data.url;
-        throw new Error('图片上传失败');
-    }
-
-    // 从公开仓库 Issues 读取所有照片
-    async function fetchCloudPhotos() {
-        try {
-            const resp = await fetch(`${GITHUB_API}/issues?labels=tutu-photo&state=all&per_page=100`, {
-                headers: { 'Accept': 'application/vnd.github.v3+json' }
-            });
-            if (resp.ok) {
-                const issues = await resp.json();
-                return issues.filter(i => i.number !== 1).map(i => {
-                    try {
-                        const data = JSON.parse(i.body || '{}');
-                        return { src: data.src || '', caption: data.caption || i.title, time: data.time || new Date(i.created_at).getTime() };
-                    } catch(e) {
-                        return { src: '', caption: i.title, time: 0 };
-                    }
-                }).filter(p => p.src).sort((a, b) => b.time - a.time);
-            }
-        } catch(e) { console.log('加载云端照片失败:', e); }
-        return [];
-    }
-
-    // 提交照片到 GitHub Issue（打开页面让用户点提交，无需 Token）
-    function submitPhotoToGitHub(imgUrl, caption) {
-        const body = encodeURIComponent(JSON.stringify({ src: imgUrl, caption, time: Date.now() }));
-        const title = encodeURIComponent('📸 ' + caption);
-        const url = `https://github.com/Bless-Tien/tutu-website/issues/new?title=${title}&body=${body}&labels=tutu-photo`;
-        window.open(url, '_blank');
-    }
-
-    // 确认上传（云端版）
+    // 确认上传（Supabase版）
     async function confirmUpload(e) {
         e.stopPropagation();
         if (!pendingFile) return;
@@ -1953,15 +2245,32 @@
         uploadBtn.disabled = true;
 
         try {
-            // 上传图片到图床
-            const imgUrl = await uploadToImgbb(pendingFile);
-            // 显示在当前页面
-            addPhotoToGallery(imgUrl, caption);
-            showToast('📸 图片已上传！请在新打开的页面点击提交按钮，所有人就能看到了～');
-            // 打开 GitHub Issue 页面让用户提交（需要登录 GitHub）
-            submitPhotoToGitHub(imgUrl, caption);
+            // 压缩图片
+            const base64 = await compressImage(pendingFile, 1200, 0.75);
+            // 保存到 Supabase 数据库
+            const { data, error } = await sb
+                .from('photos')
+                .insert({
+                    caption: caption,
+                    image_data: base64,
+                    uploader_name: currentUser.name,
+                    uploader_id: currentUser.id
+                })
+                .select()
+                .single();
+
+            if (error) throw error;
+
+            // 立即在页面显示
+            addPhotoToGallery(base64, caption, currentUser.name);
+            showToast('📸 照片上传成功！大家都能看到了～');
         } catch(err) {
-            showToast('❌ 图片上传失败，请重试');
+            console.error('上传失败:', err);
+            if (err.message && err.message.includes('does not exist')) {
+                showToast('⚠️ 数据表还未创建，请先在 Supabase 运行 SQL');
+            } else {
+                showToast('❌ 上传失败，请重试');
+            }
         }
 
         pendingFile = null;
@@ -1971,6 +2280,28 @@
         uploadBtn.innerHTML = origText;
         uploadBtn.disabled = false;
     }
+
+    // 从 Supabase 加载所有照片
+    async function loadSavedPhotos() {
+        try {
+            const { data, error } = await sb
+                .from('photos')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) throw error;
+
+            const albumGrid = document.getElementById('galleryGrid');
+            const addCard = document.getElementById('addPhotoCard');
+            data.forEach(photo => {
+                const item = createAlbumPhotoEl(photo.image_data, photo.caption, photo.uploader_name);
+                albumGrid.insertBefore(item, addCard);
+            });
+        } catch(e) {
+            console.log('加载云端照片失败:', e);
+        }
+    }
+    loadSavedPhotos();
 
     function showCaptionFloat() {
         const float = document.getElementById('captionFloat');
@@ -1993,12 +2324,16 @@
         document.getElementById('addPhotoCard').classList.remove('dragover');
         const file = e.dataTransfer.files[0];
         if (file && file.type.startsWith('image/')) {
+            if (!currentUser) {
+                showToast('🐱 请先登录再上传照片哦～');
+                openAuth();
+                return;
+            }
             pendingFile = file;
             showCaptionFloat();
         }
     }
 
-    // 可爱的随机描述文案
     const cuteDescs = [
         '本喵今天也是美美哒～',
         '这个角度拍得不错嘛！',
@@ -2018,18 +2353,17 @@
         return cuteDescs[Math.floor(Math.random() * cuteDescs.length)];
     }
 
-    // 在上传卡片之前插入照片到相册网格（云端版）
-    function addPhotoToGallery(src, caption) {
+    function addPhotoToGallery(src, caption, uploaderName) {
         const albumGrid = document.getElementById('galleryGrid');
         const addCard = document.getElementById('addPhotoCard');
-        const albumItem = createAlbumPhotoEl(src, caption);
+        const albumItem = createAlbumPhotoEl(src, caption, uploaderName);
         albumGrid.insertBefore(albumItem, addCard);
     }
 
-    // 创建相册照片元素
-    function createAlbumPhotoEl(src, caption) {
+    function createAlbumPhotoEl(src, caption, uploaderName) {
         const item = document.createElement('div');
         item.className = 'gallery-item uploaded-photo';
+        const nameTag = uploaderName ? `<span style="font-size:11px;color:var(--warm-brown);opacity:0.8;">📷 ${uploaderName}</span>` : '';
         item.innerHTML = `
             <img src="${src}" alt="${caption}" onclick="openViewer(this.src)" style="width:100%;height:220px;object-fit:cover;border-radius:12px 12px 0 0;cursor:pointer;">
             <button class="delete-btn" onclick="deletePhoto(this)">✕</button>
@@ -2037,6 +2371,7 @@
                 <button class="edit-btn" onclick="editCaption(this)" title="编辑文字">✏️</button>
                 <h4>${caption}</h4>
                 <p>${getRandomDesc()}</p>
+                ${nameTag}
             </div>
         `;
         return item;
@@ -2044,8 +2379,6 @@
 
     function deletePhoto(btn) {
         const photoEl = btn.parentElement;
-        const imgEl = photoEl.querySelector('img');
-        const imgSrc = imgEl ? imgEl.src : '';
         showDeleteConfirm('确定要删除这张照片吗？', () => {
             photoEl.classList.add('deleting');
             setTimeout(() => photoEl.remove(), 400);
@@ -2053,7 +2386,6 @@
         });
     }
 
-    // 删除相册固定照片
     function deleteGalleryItem(btn) {
         const item = btn.parentElement;
         showDeleteConfirm('确定要删除这张照片吗？', () => {
@@ -2072,8 +2404,6 @@
         const p = caption.querySelector('p');
         const currentTitle = h4.textContent;
         const currentDesc = p.textContent;
-        const item = caption.closest('.gallery-item');
-        const itemIndex = Array.from(document.querySelectorAll('#galleryGrid .gallery-item')).indexOf(item);
 
         const overlay = document.createElement('div');
         overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.4);z-index:2000;display:flex;align-items:center;justify-content:center;animation:fadeIn 0.2s ease;';
@@ -2097,27 +2427,20 @@
         `;
         document.body.appendChild(overlay);
 
-        // 保存
         overlay.querySelector('#editSaveBtn').onclick = () => {
             const newTitle = document.getElementById('editTitle').value.trim();
             const newDesc = document.getElementById('editDesc').value.trim();
             if (!newTitle) { document.getElementById('editTitle').style.borderColor = '#FF6B6B'; return; }
             h4.textContent = newTitle;
             p.textContent = newDesc;
-            // 保存到 localStorage
-            const captions = JSON.parse(localStorage.getItem('tutuCaptions') || '{}');
-            captions[itemIndex] = { title: newTitle, desc: newDesc };
-            localStorage.setItem('tutuCaptions', JSON.stringify(captions));
             overlay.remove();
             showToast('✅ 文字已更新');
         };
-        // 点击遮罩取消
         overlay.addEventListener('click', (e) => {
             if (e.target === overlay) overlay.remove();
         });
     }
 
-    // 加载已保存的相册文字
     function loadCaptions() {
         const captions = JSON.parse(localStorage.getItem('tutuCaptions') || '{}');
         const items = document.querySelectorAll('#galleryGrid .gallery-item');
@@ -2132,7 +2455,6 @@
     }
     loadCaptions();
 
-    // 删除确认弹窗
     function showDeleteConfirm(message, onConfirm) {
         const overlay = document.createElement('div');
         overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.4);z-index:2000;display:flex;align-items:center;justify-content:center;animation:fadeIn 0.2s ease;';
@@ -2147,28 +2469,14 @@
             </div>
         `;
         document.body.appendChild(overlay);
-        // 点击确认
         overlay.querySelector('#confirmDeleteBtn').onclick = () => {
             overlay.remove();
             onConfirm();
         };
-        // 点击遮罩取消
         overlay.addEventListener('click', (e) => {
             if (e.target === overlay) overlay.remove();
         });
     }
-
-    // 从云端加载所有用户上传的照片
-    async function loadSavedPhotos() {
-        const photos = await fetchCloudPhotos();
-        const albumGrid = document.getElementById('galleryGrid');
-        const addCard = document.getElementById('addPhotoCard');
-        photos.forEach(photo => {
-            const albumItem = createAlbumPhotoEl(photo.src, photo.caption);
-            albumGrid.insertBefore(albumItem, addCard);
-        });
-    }
-    loadSavedPhotos();
 
     // ==================== 图片查看器 ====================
     function openViewer(src) {
@@ -2271,7 +2579,6 @@
             const target = document.querySelector(this.getAttribute('href'));
             if (target) {
                 target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                // 关闭移动菜单
                 const links = document.querySelector('.nav-links');
                 links.style.display = '';
             }
