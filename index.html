@@ -1,0 +1,2212 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐱 突突的小窝 - Tutu's Home</title>
+    <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* ========== 全局样式 ========== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --white: #FFFFFF;
+            --cream: #FFFEF9;
+            --light-yellow: #FFF9EC;
+            --soft-orange: #FFE4B8;
+            --orange: #FF9F43;
+            --deep-orange: #F08C28;
+            --warm-brown: #8B6914;
+            --dark-brown: #5C4A1E;
+            --pink: #FFB6C1;
+            --mint: #98FB98;
+            --coral: #FF6B6B;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: var(--white);
+            color: var(--dark-brown);
+            overflow-x: hidden;
+        }
+
+        /* ========== 漂浮装饰 ========== */
+        .floating-deco {
+            position: fixed;
+            pointer-events: none;
+            z-index: 0;
+            font-size: 28px;
+            opacity: 0.12;
+            animation: floatUp linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(105vh) rotate(0deg) scale(1); opacity: 0; }
+            10% { opacity: 0.12; }
+            50% { transform: translateY(50vh) rotate(180deg) scale(1.1); opacity: 0.15; }
+            90% { opacity: 0.12; }
+            100% { transform: translateY(-50px) rotate(360deg) scale(0.9); opacity: 0; }
+        }
+
+        /* ========== 导航栏 ========== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 159, 67, 0.15);
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .navbar .logo {
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 24px;
+            color: var(--deep-orange);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--warm-brown);
+            font-size: 15px;
+            font-weight: 500;
+            padding: 6px 16px;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .nav-links a:hover {
+            background: var(--light-yellow);
+            color: var(--dark-brown);
+            border-color: var(--orange);
+            transform: translateY(-2px);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: var(--deep-orange);
+        }
+
+        /* ========== 主内容 ========== */
+        .main-content {
+            position: relative;
+            z-index: 1;
+            padding-top: 70px;
+        }
+
+        /* ========== Hero 区域 ========== */
+        .hero {
+            text-align: center;
+            padding: 60px 20px 40px;
+            background: var(--white);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -30%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255, 159, 67, 0.04) 0%, transparent 60%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .avatar-container {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 24px;
+        }
+
+        .avatar-ring {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: conic-gradient(var(--soft-orange), var(--light-yellow), var(--soft-orange), var(--light-yellow), var(--soft-orange));
+            padding: 6px;
+            animation: ringRotate 8s linear infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes ringRotate {
+            to { transform: rotate(360deg); }
+        }
+
+        .avatar-inner {
+            width: 168px;
+            height: 168px;
+            border-radius: 50%;
+            background: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            animation: ringRotate 8s linear infinite reverse;
+            overflow: hidden;
+        }
+
+        .avatar-inner svg,
+        .avatar-inner img {
+            width: 140px;
+            height: 140px;
+        }
+
+        .hero h1 {
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 56px;
+            color: var(--deep-orange);
+            text-shadow: 3px 3px 0 rgba(255, 159, 67, 0.3);
+            margin-bottom: 8px;
+        }
+
+        .hero .tagline {
+            font-family: 'Ma Shan Zheng', cursive;
+            font-size: 20px;
+            color: var(--warm-brown);
+            letter-spacing: 3px;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 32px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-num {
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 28px;
+            color: var(--deep-orange);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--warm-brown);
+            margin-top: 2px;
+        }
+
+        /* ========== 通用板块 ========== */
+        .section {
+            padding: 50px 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .section-header h2 {
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 36px;
+            color: var(--deep-orange);
+            margin-bottom: 8px;
+        }
+
+        .section-header p {
+            color: var(--warm-brown);
+            font-size: 14px;
+        }
+
+        .divider {
+            width: 60px;
+            height: 3px;
+            background: var(--orange);
+            border-radius: 2px;
+            margin: 12px auto 0;
+        }
+
+        /* ========== 档案卡 ========== */
+        .profile-card {
+            background: var(--white);
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: 0 2px 16px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(255, 159, 67, 0.12);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-card::before {
+            content: '';
+            position: absolute;
+            top: -40px;
+            right: -40px;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(255, 159, 67, 0.06) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+        }
+
+        .profile-item {
+            background: var(--light-yellow);
+            border-radius: 16px;
+            padding: 18px 14px;
+            text-align: center;
+            border: 1px solid rgba(255, 159, 67, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .profile-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        .profile-icon {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .profile-label {
+            font-size: 11px;
+            color: var(--warm-brown);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .profile-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--dark-brown);
+            margin-top: 4px;
+        }
+
+        /* ========== 互动板块（投喂/铲屎/抚摸） ========== */
+        .interact-section {
+            background: var(--light-yellow);
+        }
+
+        .interact-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .interact-card {
+            background: var(--white);
+            border-radius: 24px;
+            padding: 32px 20px;
+            text-align: center;
+            box-shadow: 0 2px 16px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(255, 159, 67, 0.1);
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        .interact-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 8px 24px rgba(255, 159, 67, 0.12);
+            border-color: var(--soft-orange);
+        }
+
+        .interact-card:active {
+            transform: translateY(-4px) scale(0.97);
+        }
+
+        .interact-img {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            margin: 0 auto 16px;
+            background: var(--light-yellow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 64px;
+            border: 2px solid var(--soft-orange);
+            transition: transform 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interact-card:hover .interact-img {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .interact-card:active .interact-img {
+            transform: scale(0.9);
+        }
+
+        /* 点击涟漪效果 */
+        .interact-card .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 159, 67, 0.2);
+            transform: scale(0);
+            animation: rippleAnim 0.6s ease-out;
+            pointer-events: none;
+        }
+
+        @keyframes rippleAnim {
+            to { transform: scale(4); opacity: 0; }
+        }
+
+        /* 互动计数器动画 */
+        .interact-counter.bump span {
+            display: inline-block;
+            animation: counterBump 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes counterBump {
+            0% { transform: scale(1); }
+            40% { transform: scale(1.5); color: #FF6B6B; }
+            100% { transform: scale(1); }
+        }
+
+        .interact-card h3 {
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 22px;
+            color: var(--deep-orange);
+            margin-bottom: 6px;
+        }
+
+        /* 投喂卡片专属 */
+        .interact-card.feed:hover {
+            border-color: #FFB347;
+            box-shadow: 0 8px 28px rgba(255, 159, 67, 0.18);
+        }
+        .interact-card.feed .interact-img {
+            background: linear-gradient(135deg, #FFF3E0, #FFE0B2);
+        }
+        .interact-card.feed h3 { color: #F57C00; }
+
+        /* 铲屎卡片专属 */
+        .interact-card.clean:hover {
+            border-color: #A5D6A7;
+            box-shadow: 0 8px 28px rgba(102, 187, 106, 0.18);
+        }
+        .interact-card.clean .interact-img {
+            background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
+        }
+        .interact-card.clean h3 { color: #388E3C; }
+
+        /* 抚摸卡片专属 */
+        .interact-card.pet:hover {
+            border-color: #F8BBD0;
+            box-shadow: 0 8px 28px rgba(236, 64, 122, 0.15);
+        }
+        .interact-card.pet .interact-img {
+            background: linear-gradient(135deg, #FCE4EC, #F8BBD0);
+        }
+        .interact-card.pet h3 { color: #C2185B; }
+
+        .interact-card p {
+            font-size: 13px;
+            color: var(--warm-brown);
+        }
+
+        .interact-counter {
+            margin-top: 12px;
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 18px;
+            color: var(--orange);
+        }
+
+        /* 互动特效容器 */
+        .effect-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        .effect-particle {
+            position: absolute;
+            animation: particleFly 1.5s ease-out forwards;
+            font-size: 32px;
+        }
+
+        @keyframes particleFly {
+            0% { opacity: 1; transform: translate(0, 0) scale(1) rotate(0deg); }
+            100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(0.3) rotate(var(--rot)); }
+        }
+
+        .heart-burst {
+            position: absolute;
+            font-size: 48px;
+            animation: heartFloat 2s ease-out forwards;
+            pointer-events: none;
+        }
+
+        @keyframes heartFloat {
+            0% { opacity: 1; transform: scale(0) translateY(0); }
+            20% { opacity: 1; transform: scale(1.2) translateY(-10px); }
+            100% { opacity: 0; transform: scale(0.8) translateY(-120px); }
+        }
+
+        @keyframes foodDrop {
+            0% { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); }
+            60% { opacity: 1; transform: translateY(var(--ty)) rotate(calc(var(--rot) * 0.6)) scale(0.9); }
+            100% { opacity: 0; transform: translateY(var(--ty)) translateX(var(--tx)) rotate(var(--rot)) scale(0.4); }
+        }
+
+        @keyframes sparkleFly {
+            0% { opacity: 1; transform: scale(1) rotate(0deg); }
+            50% { opacity: 1; transform: scale(1.5) rotate(180deg); }
+            100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(0) rotate(var(--rot)); }
+        }
+
+        @keyframes cardShake {
+            0%, 100% { transform: translateX(0) rotate(0deg); }
+            15% { transform: translateX(-6px) rotate(-2deg); }
+            30% { transform: translateX(5px) rotate(1deg); }
+            45% { transform: translateX(-4px) rotate(-1deg); }
+            60% { transform: translateX(3px) rotate(1deg); }
+            75% { transform: translateX(-2px) rotate(0deg); }
+        }
+
+        .interact-card.purring {
+            animation: purrVibrate 0.15s ease-in-out infinite;
+        }
+
+        @keyframes purrVibrate {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(1px) translateY(-0.5px); }
+            75% { transform: translateX(-1px) translateY(0.5px); }
+        }
+
+        .cat-response {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 24px 36px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+            border: 3px solid var(--orange);
+            z-index: 1000;
+            text-align: center;
+            animation: popupIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            font-family: 'ZCOOL KuaiLe', cursive;
+        }
+
+        .cat-response .emoji {
+            font-size: 48px;
+            margin-bottom: 8px;
+        }
+
+        .cat-response .text {
+            font-size: 20px;
+            color: var(--dark-brown);
+        }
+
+        .cat-response .sub {
+            font-size: 14px;
+            color: var(--warm-brown);
+            margin-top: 4px;
+        }
+
+        @keyframes popupIn {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.3); }
+            100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+
+        @keyframes popupOut {
+            0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.3); }
+        }
+
+        /* ========== 相册区域 ========== */
+        .gallery-section {
+            background: var(--white);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .gallery-item {
+            background: var(--white);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(255, 159, 67, 0.08);
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.4s ease;
+            border-radius: 16px 16px 0 0;
+            cursor: pointer;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .gallery-caption {
+            padding: 16px;
+            text-align: center;
+            position: relative;
+        }
+
+        /* 编辑按钮 */
+        .gallery-caption .edit-btn {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: rgba(255, 159, 67, 0.15);
+            border: none;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            font-size: 12px;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .gallery-item:hover .edit-btn {
+            opacity: 1;
+        }
+        .gallery-caption .edit-btn:hover {
+            transform: scale(1.15);
+            background: rgba(255, 159, 67, 0.3);
+        }
+
+        .gallery-caption h4 {
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 16px;
+            color: var(--deep-orange);
+            margin-bottom: 4px;
+        }
+
+        .gallery-caption p {
+            font-size: 13px;
+            color: var(--warm-brown);
+            line-height: 1.6;
+        }
+
+        .gallery-placeholder {
+            width: 100%;
+            height: 220px;
+            background: var(--light-yellow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 64px;
+        }
+
+        /* 相册删除按钮（固定照片） */
+        .gallery-item .delete-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(255, 107, 107, 0.9);
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            z-index: 5;
+        }
+
+        .gallery-item:hover .delete-btn {
+            opacity: 1;
+        }
+
+        .gallery-item .delete-btn:hover {
+            transform: scale(1.15);
+            background: #FF4444;
+        }
+
+        /* 删除动画 */
+        .gallery-item.deleting,
+        .user-photo.deleting {
+            animation: deleteAnim 0.4s ease forwards;
+        }
+
+        @keyframes deleteAnim {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(0.9) rotate(-3deg); opacity: 0.6; }
+            100% { transform: scale(0.7) rotate(5deg); opacity: 0; height: 0; padding: 0; margin: 0; overflow: hidden; }
+        }
+
+        /* ========== 上传区域 ========== */
+        .upload-section {
+            background: var(--white);
+        }
+
+        .upload-area {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 40px;
+            border: 2px dashed var(--soft-orange);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .upload-area:hover {
+            background: var(--light-yellow);
+            border-color: var(--orange);
+            transform: scale(1.01);
+        }
+
+        .upload-area.dragover {
+            background: var(--light-yellow);
+            border-color: var(--orange);
+        }
+
+        .upload-icon {
+            font-size: 56px;
+            margin-bottom: 16px;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .upload-area h3 {
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 22px;
+            color: var(--deep-orange);
+            margin-bottom: 8px;
+        }
+
+        .upload-area p {
+            color: var(--warm-brown);
+            font-size: 14px;
+        }
+
+        .upload-input { display: none; }
+
+        /* 相册中的上传卡片 */
+        .add-photo-card {
+            cursor: pointer;
+            border: 2px dashed #FFD699;
+            background: rgba(255, 249, 235, 0.5);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .add-photo-card:hover {
+            border-color: #FF9F43;
+            background: rgba(255, 236, 179, 0.4);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(255, 159, 67, 0.12);
+        }
+        .add-photo-card:active {
+            transform: scale(0.97);
+        }
+        .add-photo-card.dragover {
+            border-color: #FF6B6B;
+            background: rgba(255, 182, 193, 0.2);
+        }
+        .add-photo-placeholder {
+            text-align: center;
+            color: var(--warm-brown);
+        }
+        .add-photo-icon {
+            font-size: 48px;
+            margin-bottom: 8px;
+            animation: photoBounce 2s ease-in-out infinite;
+        }
+        @keyframes photoBounce {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-6px) rotate(-5deg); }
+            75% { transform: translateY(-3px) rotate(3deg); }
+        }
+        .add-photo-placeholder p {
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 16px;
+            color: var(--deep-orange);
+            margin-bottom: 4px;
+        }
+        .add-photo-placeholder span {
+            font-size: 12px;
+            color: var(--warm-brown);
+            opacity: 0.7;
+        }
+
+        /* 上传文字输入浮层 */
+        .caption-float {
+            display: none;
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            border-radius: 50px;
+            padding: 8px 8px 8px 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            z-index: 1500;
+            align-items: center;
+            gap: 10px;
+            animation: slideUp 0.3s ease;
+            border: 2px solid #FFE4B8;
+        }
+        .caption-float.show {
+            display: flex;
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+        .caption-float input {
+            border: none;
+            outline: none;
+            font-size: 15px;
+            font-family: 'Noto Sans SC', sans-serif;
+            color: #5C4A1E;
+            width: 240px;
+            background: transparent;
+        }
+        .caption-float button {
+            padding: 8px 20px;
+            border-radius: 50px;
+            border: none;
+            background: linear-gradient(135deg, #FF9F43, #FF6B6B);
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            font-family: 'Noto Sans SC', sans-serif;
+            white-space: nowrap;
+            transition: transform 0.2s;
+        }
+        .caption-float button:hover {
+            transform: scale(1.05);
+        }
+
+        .caption-input {
+            display: none;
+            margin-top: 20px;
+            gap: 12px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .caption-input.show {
+            display: flex;
+        }
+
+        .caption-input input {
+            padding: 12px 20px;
+            border: 1px solid var(--soft-orange);
+            border-radius: 50px;
+            font-size: 15px;
+            outline: none;
+            width: 280px;
+            font-family: 'Noto Sans SC', sans-serif;
+            transition: border-color 0.3s ease;
+        }
+
+        .caption-input input:focus {
+            border-color: var(--orange);
+        }
+
+        .caption-input input::placeholder {
+            color: #ccc;
+        }
+
+        .caption-input button {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, var(--orange), var(--deep-orange));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 15px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-family: 'Noto Sans SC', sans-serif;
+        }
+
+        .caption-input button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 16px rgba(255, 159, 67, 0.3);
+        }
+
+        /* 用户上传的照片展示 */
+        .user-gallery {
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .gallery-item.uploaded-photo {
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .user-photo {
+            background: var(--white);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(255, 159, 67, 0.08);
+            animation: fadeInUp 0.5s ease;
+            position: relative;
+        }
+
+        .user-photo img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .user-photo .photo-caption {
+            padding: 12px;
+            text-align: center;
+            font-size: 14px;
+            color: var(--dark-brown);
+            font-weight: 500;
+        }
+
+        .user-photo .delete-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(255, 107, 107, 0.9);
+            color: white;
+            border: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .user-photo:hover .delete-btn {
+            opacity: 1;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ========== 优缺点 ========== */
+        .traits-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .trait-box {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 28px;
+            border: 1px solid rgba(255, 159, 67, 0.1);
+        }
+
+        .trait-box h3 {
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 22px;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .trait-box.pros h3 { color: #059669; }
+        .trait-box.cons h3 { color: #ec4899; }
+
+        .trait-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .trait-tag {
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+
+        .trait-tag.pro {
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+            color: #065f46;
+            border: 2px solid #6ee7b7;
+        }
+
+        .trait-tag.con {
+            background: linear-gradient(135deg, #fce7f3, #fbcfe8);
+            color: #9d174d;
+            border: 2px solid #f9a8d4;
+        }
+
+        .trait-tag:hover {
+            transform: scale(1.08) rotate(-3deg);
+        }
+
+        /* ========== 爱好标签 ========== */
+        .hobby-section {
+            background: var(--light-yellow);
+        }
+
+        .hobby-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            justify-content: center;
+        }
+
+        .hobby-tag {
+            background: var(--orange);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 500;
+            box-shadow: 0 2px 8px rgba(255, 159, 67, 0.2);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: default;
+        }
+
+        .hobby-tag:hover {
+            transform: scale(1.08) rotate(-2deg);
+            box-shadow: 0 4px 16px rgba(255, 159, 67, 0.3);
+        }
+
+        /* ========== 迁徙路线 ========== */
+        .route-section {
+            background: var(--white);
+        }
+
+        .route-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+            padding: 30px;
+            flex-wrap: wrap;
+        }
+
+        .route-city {
+            background: linear-gradient(135deg, var(--orange), var(--deep-orange));
+            color: white;
+            padding: 20px 32px;
+            border-radius: 20px;
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 24px;
+            box-shadow: 0 6px 20px rgba(255, 159, 67, 0.3);
+            position: relative;
+        }
+
+        .route-city.current {
+            background: linear-gradient(135deg, #10b981, #059669);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .route-city.current::after {
+            content: '🏠 现居';
+            position: absolute;
+            top: -12px;
+            right: -12px;
+            background: var(--coral);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 12px;
+        }
+
+        .route-arrow {
+            font-size: 36px;
+            color: var(--orange);
+            animation: arrowPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes arrowPulse {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(10px); }
+        }
+
+        .route-label {
+            text-align: center;
+            margin-top: 6px;
+            font-size: 12px;
+            color: var(--warm-brown);
+        }
+
+        /* ========== 猫语录 ========== */
+        .quotes-section {
+            background: var(--white);
+        }
+
+        .quote-box {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 36px;
+            text-align: center;
+            border: 1px solid rgba(255, 159, 67, 0.1);
+            box-shadow: 0 2px 16px rgba(0, 0, 0, 0.04);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .quote-text {
+            font-family: 'Ma Shan Zheng', cursive;
+            font-size: 24px;
+            color: var(--dark-brown);
+            line-height: 1.8;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease;
+        }
+
+        .quote-emoji {
+            font-size: 48px;
+            margin-top: 16px;
+        }
+
+        .quote-nav {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .quote-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--soft-orange);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .quote-dot.active {
+            background: var(--orange);
+            transform: scale(1.4);
+        }
+
+        /* ========== 页脚 ========== */
+        .footer {
+            background: var(--light-yellow);
+            color: var(--dark-brown);
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 1px solid rgba(255, 159, 67, 0.1);
+        }
+
+        .footer .paw-trail {
+            font-size: 24px;
+            margin-bottom: 12px;
+            letter-spacing: 8px;
+        }
+
+        .footer h3 {
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .footer p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* ========== 回到顶部 ========== */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--orange), var(--deep-orange));
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(255, 159, 67, 0.4);
+            z-index: 50;
+            transition: all 0.3s ease;
+            display: none;
+        }
+
+        .back-to-top.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-4px) scale(1.1);
+        }
+
+        /* ========== 移动端响应 ========== */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 40px; }
+            .nav-links { display: none; }
+            .mobile-menu-btn { display: block; }
+            .interact-grid { grid-template-columns: 1fr; max-width: 320px; margin: 0 auto; }
+            .traits-grid { grid-template-columns: 1fr; }
+            .hero-stats { gap: 20px; }
+            .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 32px; }
+            .section { padding: 30px 16px; }
+            .profile-card { padding: 24px; }
+            .avatar-ring { width: 140px; height: 140px; }
+            .avatar-inner { width: 128px; height: 128px; }
+            .avatar-inner svg { width: 105px; height: 105px; }
+        }
+
+        /* ========== 图片查看器 ========== */
+        .image-viewer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: zoom-out;
+        }
+
+        .image-viewer.show {
+            display: flex;
+        }
+
+        .image-viewer img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 16px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+            animation: zoomIn 0.3s ease;
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        /* Toast 提示 */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 14px 28px;
+            border-radius: 50px;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.15);
+            border: 2px solid var(--orange);
+            font-size: 15px;
+            color: var(--dark-brown);
+            z-index: 1500;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-family: 'ZCOOL KuaiLe', cursive;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+<!-- 漂浮装饰 -->
+<div class="floating-deco" style="left:3%; animation-duration:14s; animation-delay:0s;">🐾</div>
+<div class="floating-deco" style="left:12%; animation-duration:18s; animation-delay:2s;">🐟</div>
+<div class="floating-deco" style="left:25%; animation-duration:12s; animation-delay:5s;">🐾</div>
+<div class="floating-deco" style="left:40%; animation-duration:16s; animation-delay:1s;">✨</div>
+<div class="floating-deco" style="left:55%; animation-duration:13s; animation-delay:3s;">🐾</div>
+<div class="floating-deco" style="left:68%; animation-duration:17s; animation-delay:6s;">❤️</div>
+<div class="floating-deco" style="left:80%; animation-duration:11s; animation-delay:4s;">🐾</div>
+<div class="floating-deco" style="left:92%; animation-duration:15s; animation-delay:7s;">🌟</div>
+
+<!-- 互动特效层 -->
+<div class="effect-layer" id="effectLayer"></div>
+
+<!-- 图片查看器 -->
+<div class="image-viewer" id="imageViewer" onclick="closeViewer()">
+    <img id="viewerImg" src="" alt="查看大图">
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- 导航栏 -->
+<nav class="navbar" id="navbar">
+    <div class="logo">🐱 突突的小窝</div>
+    <ul class="nav-links">
+        <li><a href="#about">关于突突</a></li>
+        <li><a href="#interact">互动</a></li>
+        <li><a href="#gallery">相册</a></li>
+
+    </ul>
+    <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+</nav>
+
+<div class="main-content">
+
+    <!-- ========== Hero ========== -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="avatar-container">
+                <div class="avatar-ring">
+                    <div class="avatar-inner">
+                        <img src="photos/tutu-avatar.png" alt="突突" style="width:140px;height:140px;object-fit:cover;border-radius:50%;">
+                    </div>
+                </div>
+            </div>
+            <h1>突突</h1>
+            <p class="tagline">· 皇家拆家大队长 · 饭桶担当 · 无缺点之王 ·</p>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-num" id="ageDisplay">加载中</div>
+                    <div class="stat-label">年龄</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-num">♀</div>
+                    <div class="stat-label">女孩子</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-num">彩狸</div>
+                    <div class="stat-label">品种</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-num">🐱</div>
+                    <div class="stat-label">2025.06.01生</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== 关于突突 ========== -->
+    <section class="section" id="about">
+        <div class="section-header">
+            <h2>📋 突突的档案</h2>
+            <p>一只完美的小猫咪，请认真阅读！</p>
+            <div class="divider"></div>
+        </div>
+        <div class="profile-card">
+            <div class="profile-grid">
+                <div class="profile-item">
+                    <div class="profile-icon">🐱</div>
+                    <div class="profile-label">名字</div>
+                    <div class="profile-value">突突</div>
+                </div>
+                <div class="profile-item">
+                    <div class="profile-icon">🎨</div>
+                    <div class="profile-label">品种</div>
+                    <div class="profile-value">彩狸</div>
+                </div>
+                <div class="profile-item">
+                    <div class="profile-icon">🎂</div>
+                    <div class="profile-label">生日</div>
+                    <div class="profile-value">2025.06.01</div>
+                </div>
+                <div class="profile-item">
+                    <div class="profile-icon">💫</div>
+                    <div class="profile-label">星座</div>
+                    <div class="profile-value">♊ 双子座</div>
+                </div>
+                <div class="profile-item">
+                    <div class="profile-icon">.</div>
+                    <div class="profile-label">性别</div>
+                    <div class="profile-value">♀ 妹妹</div>
+                </div>
+                <div class="profile-item">
+                    <div class="profile-icon">🐍</div>
+                    <div class="profile-label">生肖</div>
+                    <div class="profile-value">蛇年宝宝</div>
+                </div>
+                <div class="profile-item">
+                    <div class="profile-icon">🏠</div>
+                    <div class="profile-label">祖籍</div>
+                    <div class="profile-value">嘉兴</div>
+                </div>
+                <div class="profile-item">
+                    <div class="profile-icon">🏙️</div>
+                    <div class="profile-label">现居</div>
+                    <div class="profile-value">上海</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== 互动板块 ========== -->
+    <section class="interact-section" id="interact">
+        <div class="section">
+            <div class="section-header">
+                <h2>🎮 来和突突互动吧！</h2>
+                <p>点一点，摸一摸，突突会很开心的喵～</p>
+                <div class="divider"></div>
+            </div>
+            <div class="interact-grid">
+                <!-- 投喂 -->
+                <div class="interact-card feed" onclick="interactFeed(event)">
+                    <div class="interact-img" id="feedImg">
+                        <span>🐟</span>
+                    </div>
+                    <h3>投喂突突</h3>
+                    <p>给突突好吃的！</p>
+                    <div class="interact-counter">已投喂 <span id="feedCount">0</span> 次</div>
+                </div>
+                <!-- 铲屎 -->
+                <div class="interact-card clean" onclick="interactClean(event)">
+                    <div class="interact-img" id="cleanImg">
+                        <span>🧹</span>
+                    </div>
+                    <h3>给突突铲屎</h3>
+                    <p>铲屎官的使命！</p>
+                    <div class="interact-counter">已铲屎 <span id="cleanCount">0</span> 次</div>
+                </div>
+                <!-- 抚摸 -->
+                <div class="interact-card pet" onclick="interactPet(event)">
+                    <div class="interact-img" id="petImg">
+                        <span>🤗</span>
+                    </div>
+                    <h3>抚摸突突</h3>
+                    <p>突突最享受了～</p>
+                    <div class="interact-counter">已抚摸 <span id="petCount">0</span> 次</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== 爱好 ========== -->
+    <section class="section hobby-section">
+        <div class="section-header">
+            <h2>❤️ 突突的爱好</h2>
+            <p>每一项都是拿手绝活</p>
+            <div class="divider"></div>
+        </div>
+        <div class="hobby-tags">
+            <span class="hobby-tag">🥫 吃猫罐头</span>
+            <span class="hobby-tag">🍖 吃猫条</span>
+            <span class="hobby-tag">👊 打人</span>
+            <span class="hobby-tag">💥 拆家</span>
+            <span class="hobby-tag">😴 睡觉</span>
+            <span class="hobby-tag">🏃 满屋跑酷</span>
+        </div>
+    </section>
+
+    <!-- ========== 优缺点 ========== -->
+    <section class="section">
+        <div class="section-header">
+            <h2>⭐ 优缺点评定</h2>
+            <p>由突突本人亲自认定</p>
+            <div class="divider"></div>
+        </div>
+        <div class="traits-grid">
+            <div class="trait-box pros">
+                <h3>✨ 优点</h3>
+                <div class="trait-tags">
+                    <span class="trait-tag pro">⚡ 精力旺盛</span>
+                    <span class="trait-tag pro">🍚 饭量大</span>
+                    <span class="trait-tag pro">💖 可爱到爆</span>
+                    <span class="trait-tag pro">🌟 闪闪发光</span>
+                </div>
+            </div>
+            <div class="trait-box cons">
+                <h3>😅 缺点</h3>
+                <div class="trait-tags">
+                    <span class="trait-tag con">👑 没有缺点！</span>
+                    <span class="trait-tag con">💪 完美无瑕！</span>
+                    <span class="trait-tag con">🎀 仙女本仙！</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== 相册 ========== -->
+    <section class="gallery-section" id="gallery">
+        <div class="section">
+            <div class="section-header">
+                <h2>📸 突突的相册</h2>
+                <p>每一张都是绝美大片！</p>
+                <div class="divider"></div>
+            </div>
+            <div class="gallery-grid" id="galleryGrid">
+                <!-- 照片卡片1 -->
+                <div class="gallery-item">
+                    <img src="photos/012da3dd7d5288c00270836cf1558f6c.jpg" alt="偷窥的突突" onclick="openViewer(this.src)">
+                    <button class="delete-btn" onclick="deleteGalleryItem(this)" title="删除照片">✕</button>
+                    <div class="gallery-caption">
+                        <button class="edit-btn" onclick="editCaption(this)" title="编辑文字">✏️</button>
+                        <h4>偷窥的突突</h4>
+                        <p>"喵？你在看什么？让我也看看！"</p>
+                    </div>
+                </div>
+                <!-- 照片卡片2 -->
+                <div class="gallery-item">
+                    <img src="photos/1a0fe439d94a39323908e45baea560b2.jpg" alt="睡到变形" onclick="openViewer(this.src)">
+                    <button class="delete-btn" onclick="deleteGalleryItem(this)" title="删除照片">✕</button>
+                    <div class="gallery-caption">
+                        <button class="edit-btn" onclick="editCaption(this)" title="编辑文字">✏️</button>
+                        <h4>睡到变形</h4>
+                        <p>"这个姿势最舒服了，不许吵我！"</p>
+                    </div>
+                </div>
+                <!-- 照片卡片3 -->
+                <div class="gallery-item">
+                    <img src="photos/1dccc7ba0138ab00737cdef2ed34d965.jpg" alt="思考猫生" onclick="openViewer(this.src)">
+                    <button class="delete-btn" onclick="deleteGalleryItem(this)" title="删除照片">✕</button>
+                    <div class="gallery-caption">
+                        <button class="edit-btn" onclick="editCaption(this)" title="编辑文字">✏️</button>
+                        <h4>思考猫生</h4>
+                        <p>"今天该拆沙发还是拆窗帘呢？"</p>
+                    </div>
+                </div>
+                <!-- 照片卡片4 -->
+                <div class="gallery-item">
+                    <img src="photos/2c7cdc166b1c677b07f2b0a89d345ef5.jpg" alt="卖萌时间" onclick="openViewer(this.src)">
+                    <button class="delete-btn" onclick="deleteGalleryItem(this)" title="删除照片">✕</button>
+                    <div class="gallery-caption">
+                        <button class="edit-btn" onclick="editCaption(this)" title="编辑文字">✏️</button>
+                        <h4>卖萌时间</h4>
+                        <p>"看什么看！没见过漂亮猫咪吗！"</p>
+                    </div>
+                </div>
+                <!-- 照片卡片5 -->
+                <div class="gallery-item">
+                    <img src="photos/330be70f783ca1f907abf2982bf8e284.jpg" alt="来吃一口" onclick="openViewer(this.src)">
+                    <button class="delete-btn" onclick="deleteGalleryItem(this)" title="删除照片">✕</button>
+                    <div class="gallery-caption">
+                        <button class="edit-btn" onclick="editCaption(this)" title="编辑文字">✏️</button>
+                        <h4>来吃一口</h4>
+                        <p>"那是我的！都是我的！别想抢！"</p>
+                    </div>
+                </div>
+                <!-- 照片卡片6 -->
+                <div class="gallery-item">
+                    <img src="photos/81a5df48bffc8ae473fb2e050317938e.jpg" alt="铲屎官视角" onclick="openViewer(this.src)">
+                    <button class="delete-btn" onclick="deleteGalleryItem(this)" title="删除照片">✕</button>
+                    <div class="gallery-caption">
+                        <button class="edit-btn" onclick="editCaption(this)" title="编辑文字">✏️</button>
+                        <h4>铲屎官视角</h4>
+                        <p>"你拍我干嘛？给我罐头再说！"</p>
+                    </div>
+                </div>
+                <!-- 照片卡片7 -->
+                <div class="gallery-item">
+                    <img src="photos/e9aa3baa8b5e75dcfcd054926dc1ad14.jpg" alt="暗中观察" onclick="openViewer(this.src)">
+                    <button class="delete-btn" onclick="deleteGalleryItem(this)" title="删除照片">✕</button>
+                    <div class="gallery-caption">
+                        <button class="edit-btn" onclick="editCaption(this)" title="编辑文字">✏️</button>
+                        <h4>暗中观察</h4>
+                        <p>"敌人在哪？本喵来侦查一下。"</p>
+                    </div>
+                </div>
+                <!-- 照片卡片8 -->
+                <div class="gallery-item">
+                    <img src="photos/f6fda29647563418964f5e5c5a85f7bc.jpg" alt="伸懒腰" onclick="openViewer(this.src)">
+                    <button class="delete-btn" onclick="deleteGalleryItem(this)" title="删除照片">✕</button>
+                    <div class="gallery-caption">
+                        <button class="edit-btn" onclick="editCaption(this)" title="编辑文字">✏️</button>
+                        <h4>伸懒腰</h4>
+                        <p>"伸个懒腰～又是想拆家的一天！"</p>
+                    </div>
+                </div>
+                <!-- 上传照片卡片 -->
+                <div class="gallery-item add-photo-card" id="addPhotoCard" onclick="triggerUpload()" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
+                    <div class="add-photo-placeholder">
+                        <div class="add-photo-icon">📷</div>
+                        <p>上传新照片</p>
+                        <span>点击或拖拽</span>
+                    </div>
+                    <input type="file" class="upload-input" id="fileInput" accept="image/*" onchange="handleFileSelect(event)">
+                </div>
+            </div>
+        </div>
+        <!-- 上传文字输入浮层 -->
+        <div class="caption-float" id="captionFloat">
+            <input type="text" id="captionText" placeholder="给照片配一句可爱的文字..." maxlength="50">
+            <button onclick="confirmUpload(event)">✅ 确认</button>
+        </div>
+    </section>
+
+
+    <!-- ========== 突突语录 ========== -->
+    <section class="quotes-section section">
+        <div class="section-header">
+            <h2>💭 突突语录</h2>
+            <p>来自突突本人的心声</p>
+            <div class="divider"></div>
+        </div>
+        <div class="quote-box">
+            <div class="quote-text" id="quoteText">本喵没有缺点，有缺点的都是你们人类！喵～</div>
+            <div class="quote-emoji" id="quoteEmoji">😸</div>
+            <div class="quote-nav" id="quoteNav"></div>
+        </div>
+    </section>
+
+</div>
+
+<!-- 页脚 -->
+<footer class="footer">
+    <div class="paw-trail">🐾 🐾 🐾 🐾</div>
+    <h3>突突的小窝</h3>
+    <p>© 2025-2026 突突帝国 · 保留所有猫权 · 喵～</p>
+    <p style="margin-top: 8px; font-size: 12px; opacity: 0.7;">用爱与罐头搭建 💛</p>
+</footer>
+
+<!-- 回到顶部 -->
+<button class="back-to-top" id="backToTop" onclick="scrollToTop()">🐱</button>
+
+<script>
+    // ==================== 年龄计算 ====================
+    function calcAge() {
+        const birth = new Date(2025, 5, 1);
+        const now = new Date();
+        if (now < birth) { document.getElementById('ageDisplay').textContent = '还没出生'; return; }
+        let years = now.getFullYear() - birth.getFullYear();
+        let months = now.getMonth() - birth.getMonth();
+        let days = now.getDate() - birth.getDate();
+        if (days < 0) months--;
+        if (months < 0) { years--; months += 12; }
+        const totalMonths = years * 12 + months;
+        const el = document.getElementById('ageDisplay');
+        if (years >= 1) {
+            el.textContent = years + '岁' + (months > 0 ? months + '个月' : '');
+        } else {
+            el.textContent = totalMonths + '个月' + (days >= 0 ? days + '天' : '');
+        }
+    }
+    calcAge();
+
+    // ==================== 互动系统 ====================
+    let feedCount = 0, cleanCount = 0, petCount = 0;
+
+    // 从localStorage读取
+    const saved = JSON.parse(localStorage.getItem('tutuInteract') || '{}');
+    feedCount = saved.feed || 0;
+    cleanCount = saved.clean || 0;
+    petCount = saved.pet || 0;
+    updateCounters();
+
+    function updateCounters() {
+        const feedEl = document.getElementById('feedCount');
+        const cleanEl = document.getElementById('cleanCount');
+        const petEl = document.getElementById('petCount');
+        feedEl.textContent = feedCount;
+        cleanEl.textContent = cleanCount;
+        petEl.textContent = petCount;
+        localStorage.setItem('tutuInteract', JSON.stringify({ feed: feedCount, clean: cleanCount, pet: petCount }));
+    }
+
+    // 计数器跳动动画
+    function animateCounter(id) {
+        const counter = document.getElementById(id).parentElement;
+        counter.classList.remove('bump');
+        void counter.offsetWidth; // 触发 reflow
+        counter.classList.add('bump');
+        setTimeout(() => counter.classList.remove('bump'), 400);
+    }
+
+    // 投喂
+    function interactFeed(e) {
+        feedCount++;
+        updateCounters();
+        animateCounter('feedCount');
+        const emojis = ['🐟', '🥫', '🍖', '🐔', '🧶', '🥛', '😋', '🤤'];
+        const texts = [
+            { emoji: '😋', text: '好吃好吃！再来一个！', sub: '突突的幸福指数 +100' },
+            { emoji: '🤤', text: '这个味道不错嘛！', sub: '突突给铲屎官好评' },
+            { emoji: '😸', text: '呼噜呼噜～真香～', sub: '突突开心到起飞' },
+            { emoji: '😻', text: '居然给我吃这个！算你有眼光！', sub: '突突勉强满意' },
+            { emoji: '😋', text: '碗空了！还不快续上！', sub: '突突的饭桶属性发动' },
+            { emoji: '😸', text: '喵呜～今天也是被投喂的幸福猫！', sub: '突突打饱嗝中' },
+        ];
+        // 卡片震动反馈
+        shakeCard(e.currentTarget);
+        spawnParticles(e, emojis, ['#FF9F43', '#FFD699', '#FF6B6B']);
+        // 投喂时额外生成食物掉落效果
+        for (let i = 0; i < 3; i++) {
+            setTimeout(() => spawnFoodDrop(e), i * 200);
+        }
+        showCatResponse(texts[Math.floor(Math.random() * texts.length)]);
+    }
+
+    // 铲屎
+    function interactClean(e) {
+        cleanCount++;
+        updateCounters();
+        animateCounter('cleanCount');
+        const emojis = ['💩', '🧹', '🪣', '✨', '💨', '🧼'];
+        const texts = [
+            { emoji: '😏', text: '嗯，这次铲得还行。', sub: '突突勉强认可' },
+            { emoji: '😸', text: '铲屎官辛苦了～本喵恩准你休息。', sub: '突突大发慈悲' },
+            { emoji: '😽', text: '干净的环境，本喵很满意！', sub: '突突心情值 +50' },
+            { emoji: '😼', text: '你可别嫌弃！这是本喵的杰作！', sub: '突突表示抗议' },
+            { emoji: '😸', text: '快去洗手！不许碰我！', sub: '突突嫌弃脸' },
+            { emoji: '😏', text: '今天味道不错，说明我吃得很好！', sub: '突突很骄傲' },
+        ];
+        shakeCard(e.currentTarget);
+        spawnParticles(e, emojis, ['#98FB98', '#D1FAE5', '#FFD699']);
+        // 铲屎时额外产生星星闪耀效果
+        for (let i = 0; i < 4; i++) {
+            setTimeout(() => spawnSparkle(e), i * 180);
+        }
+        showCatResponse(texts[Math.floor(Math.random() * texts.length)]);
+    }
+
+    // 抚摸
+    function interactPet(e) {
+        petCount++;
+        updateCounters();
+        animateCounter('petCount');
+        const emojis = ['❤️', '💖', '💕', '💗', '💓', '🥰', '✨', '⭐'];
+        const texts = [
+            { emoji: '😻', text: '呼噜呼噜呼噜～', sub: '突突的幸福值已爆表' },
+            { emoji: '🥰', text: '再摸摸这里～对对对就是那里～', sub: '突突很享受' },
+            { emoji: '😸', text: '好了好了，够了！别摸秃了！', sub: '突突假装修止' },
+            { emoji: '😽', text: '只有我允许你才能摸哦！', sub: '突突宣布专属权' },
+            { emoji: '😍', text: '嗯…你摸得不错，提拔你做首席铲屎官！', sub: '突突授予称号' },
+            { emoji: '😻', text: '唔…再摸一下下…最后一下…', sub: '突突停不下来' },
+        ];
+        shakeCard(e.currentTarget);
+        spawnParticles(e, emojis, ['#FFB6C1', '#FF69B4', '#FF9F43', '#FFD699']);
+        // 额外的爱心飘散效果
+        for (let i = 0; i < 5; i++) {
+            setTimeout(() => spawnHeart(e), i * 150);
+        }
+        // 抚摸时额外产生呼噜震动效果
+        purrEffect(e.currentTarget);
+        showCatResponse(texts[Math.floor(Math.random() * texts.length)]);
+    }
+
+    // 粒子特效
+    function spawnParticles(e, emojis, colors) {
+        const layer = document.getElementById('effectLayer');
+        const rect = e.currentTarget.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+
+        for (let i = 0; i < 15; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'effect-particle';
+            particle.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            const tx = (Math.random() - 0.5) * 300;
+            const ty = -(Math.random() * 250 + 50);
+            const rot = (Math.random() - 0.5) * 720;
+            particle.style.cssText = `left:${cx}px; top:${cy}px; --tx:${tx}px; --ty:${ty}px; --rot:${rot}deg; color:${colors[Math.floor(Math.random() * colors.length)]};`;
+            layer.appendChild(particle);
+            setTimeout(() => particle.remove(), 1500);
+        }
+    }
+
+    // 爱心飘散
+    function spawnHeart(e) {
+        const rect = e.currentTarget.getBoundingClientRect();
+        const heart = document.createElement('div');
+        heart.className = 'heart-burst';
+        heart.textContent = ['❤️', '💖', '💕', '💗', '💓', '🧡', '💛'][Math.floor(Math.random() * 7)];
+        heart.style.cssText = `left:${rect.left + Math.random() * rect.width}px; top:${rect.top + rect.height / 2}px;`;
+        document.getElementById('effectLayer').appendChild(heart);
+        setTimeout(() => heart.remove(), 2000);
+    }
+
+    // 食物掉落效果（投喂专用）
+    function spawnFoodDrop(e) {
+        const rect = e.currentTarget.getBoundingClientRect();
+        const foods = ['🐟', '🥫', '🍖', '🍗', '🧶', '🥩', '🍚'];
+        const food = document.createElement('div');
+        food.className = 'effect-particle';
+        food.textContent = foods[Math.floor(Math.random() * foods.length)];
+        const startX = rect.left + Math.random() * rect.width;
+        const tx = (Math.random() - 0.5) * 100;
+        const ty = Math.random() * 150 + 100;
+        const rot = (Math.random() - 0.5) * 540;
+        food.style.cssText = `left:${startX}px; top:${rect.top - 20}px; --tx:${tx}px; --ty:${ty}px; --rot:${rot}deg; font-size:28px;`;
+        food.style.animation = 'foodDrop 1.2s ease-in forwards';
+        document.getElementById('effectLayer').appendChild(food);
+        setTimeout(() => food.remove(), 1200);
+    }
+
+    // 星星闪耀效果（铲屎专用）
+    function spawnSparkle(e) {
+        const rect = e.currentTarget.getBoundingClientRect();
+        const sparkle = document.createElement('div');
+        sparkle.className = 'effect-particle';
+        sparkle.textContent = ['✨', '⭐', '🌟', '💫', '🧹'][Math.floor(Math.random() * 5)];
+        const startX = rect.left + Math.random() * rect.width;
+        const startY = rect.top + Math.random() * rect.height;
+        const tx = (Math.random() - 0.5) * 200;
+        const ty = -(Math.random() * 180 + 60);
+        const rot = (Math.random() - 0.5) * 360;
+        sparkle.style.cssText = `left:${startX}px; top:${startY}px; --tx:${tx}px; --ty:${ty}px; --rot:${rot}deg; font-size:24px;`;
+        sparkle.style.animation = 'sparkleFly 1s ease-out forwards';
+        document.getElementById('effectLayer').appendChild(sparkle);
+        setTimeout(() => sparkle.remove(), 1000);
+    }
+
+    // 卡片震动效果
+    function shakeCard(card) {
+        card.style.animation = 'cardShake 0.5s ease';
+        setTimeout(() => card.style.animation = '', 500);
+    }
+
+    // 呼噜震动效果（抚摸专用）
+    function purrEffect(card) {
+        card.classList.add('purring');
+        setTimeout(() => card.classList.remove('purring'), 2000);
+    }
+
+    // 猫咪回应弹窗
+    function showCatResponse(data) {
+        const existing = document.querySelector('.cat-response');
+        if (existing) existing.remove();
+
+        const popup = document.createElement('div');
+        popup.className = 'cat-response';
+        popup.innerHTML = `<div class="emoji">${data.emoji}</div><div class="text">${data.text}</div><div class="sub">${data.sub}</div>`;
+        document.body.appendChild(popup);
+
+        setTimeout(() => {
+            popup.style.animation = 'popupOut 0.3s ease forwards';
+            setTimeout(() => popup.remove(), 300);
+        }, 2000);
+    }
+
+    // ==================== 图片上传 ====================
+    let pendingFile = null;
+
+    function triggerUpload() {
+        document.getElementById('fileInput').click();
+    }
+
+    function handleFileSelect(e) {
+        const file = e.target.files[0];
+        if (file) {
+            pendingFile = file;
+            showCaptionFloat();
+        }
+    }
+
+    const cuteTitles = [
+        '突突的可爱瞬间', '今日份突突', '突突营业中', '突突的日常碎片',
+        '突突的私房照', '突突又在卖萌', '突突的自拍时间', '突突的日记本',
+        '突突的闪光时刻', '突突的快乐时光', '突突的撒娇日常', '突突的午后时光',
+    ];
+
+    function getRandomTitle() {
+        return cuteTitles[Math.floor(Math.random() * cuteTitles.length)];
+    }
+
+    function confirmUpload(e) {
+        e.stopPropagation();
+        if (!pendingFile) return;
+        const caption = document.getElementById('captionText').value.trim() || getRandomTitle();
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+            addPhotoToGallery(ev.target.result, caption);
+        };
+        reader.readAsDataURL(pendingFile);
+        pendingFile = null;
+        document.getElementById('captionText').value = '';
+        document.getElementById('captionFloat').classList.remove('show');
+        document.getElementById('fileInput').value = '';
+        showToast('📸 上传成功！新照片已添加到相册～');
+    }
+
+    function showCaptionFloat() {
+        const float = document.getElementById('captionFloat');
+        float.classList.add('show');
+        document.getElementById('captionText').focus();
+    }
+
+    function handleDragOver(e) {
+        e.preventDefault();
+        document.getElementById('addPhotoCard').classList.add('dragover');
+    }
+
+    function handleDragLeave(e) {
+        e.preventDefault();
+        document.getElementById('addPhotoCard').classList.remove('dragover');
+    }
+
+    function handleDrop(e) {
+        e.preventDefault();
+        document.getElementById('addPhotoCard').classList.remove('dragover');
+        const file = e.dataTransfer.files[0];
+        if (file && file.type.startsWith('image/')) {
+            pendingFile = file;
+            showCaptionFloat();
+        }
+    }
+
+    // 可爱的随机描述文案
+    const cuteDescs = [
+        '本喵今天也是美美哒～',
+        '这个角度拍得不错嘛！',
+        '不许偷拍！除非有罐头！',
+        '本喵的颜值无需滤镜～',
+        '今天心情很好，批准你撸一下',
+        '看什么看！没见过仙女猫吗！',
+        '这是突突帝国的官方写真集～',
+        '铲屎官的拍照技术退步了！',
+        '正在思考下一顿吃什么…',
+        '突突的盛世美颜营业中～',
+        '本喵允许你保存这张照片',
+        '别发了！本喵的隐私都要没了！',
+    ];
+
+    function getRandomDesc() {
+        return cuteDescs[Math.floor(Math.random() * cuteDescs.length)];
+    }
+
+    // 在上传卡片之前插入照片到相册网格
+    function addPhotoToGallery(src, caption) {
+        const albumGrid = document.getElementById('galleryGrid');
+        const addCard = document.getElementById('addPhotoCard');
+        const albumItem = createAlbumPhotoEl(src, caption);
+        albumGrid.insertBefore(albumItem, addCard);
+
+        // 保存到localStorage
+        const photos = JSON.parse(localStorage.getItem('tutuPhotos') || '[]');
+        photos.unshift({ src, caption });
+        if (photos.length > 20) photos.pop();
+        localStorage.setItem('tutuPhotos', JSON.stringify(photos));
+    }
+
+    // 创建相册照片元素
+    function createAlbumPhotoEl(src, caption) {
+        const item = document.createElement('div');
+        item.className = 'gallery-item uploaded-photo';
+        item.innerHTML = `
+            <img src="${src}" alt="${caption}" onclick="openViewer(this.src)" style="width:100%;height:220px;object-fit:cover;border-radius:12px 12px 0 0;cursor:pointer;">
+            <button class="delete-btn" onclick="deletePhoto(this)">✕</button>
+            <div class="gallery-caption">
+                <button class="edit-btn" onclick="editCaption(this)" title="编辑文字">✏️</button>
+                <h4>${caption}</h4>
+                <p>${getRandomDesc()}</p>
+            </div>
+        `;
+        return item;
+    }
+
+    function deletePhoto(btn) {
+        const photoEl = btn.parentElement;
+        const imgEl = photoEl.querySelector('img');
+        const imgSrc = imgEl ? imgEl.src : '';
+        showDeleteConfirm('确定要删除这张照片吗？', () => {
+            const photos = JSON.parse(localStorage.getItem('tutuPhotos') || '[]');
+            const idx = photos.findIndex(p => p.src === imgSrc);
+            if (idx !== -1) {
+                photos.splice(idx, 1);
+                localStorage.setItem('tutuPhotos', JSON.stringify(photos));
+            }
+            photoEl.classList.add('deleting');
+            setTimeout(() => photoEl.remove(), 400);
+            showToast('🗑️ 照片已删除');
+        });
+    }
+
+    // 删除相册固定照片
+    function deleteGalleryItem(btn) {
+        const item = btn.parentElement;
+        showDeleteConfirm('确定要删除这张照片吗？', () => {
+            item.classList.add('deleting');
+            setTimeout(() => {
+                item.remove();
+                showToast('🗑️ 照片已删除');
+            }, 400);
+        });
+    }
+
+    // ==================== 文字编辑 ====================
+    function editCaption(btn) {
+        const caption = btn.parentElement;
+        const h4 = caption.querySelector('h4');
+        const p = caption.querySelector('p');
+        const currentTitle = h4.textContent;
+        const currentDesc = p.textContent;
+        const item = caption.closest('.gallery-item');
+        const itemIndex = Array.from(document.querySelectorAll('#galleryGrid .gallery-item')).indexOf(item);
+
+        const overlay = document.createElement('div');
+        overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.4);z-index:2000;display:flex;align-items:center;justify-content:center;animation:fadeIn 0.2s ease;';
+        overlay.innerHTML = `
+            <div style="background:white;border-radius:20px;padding:32px 40px;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,0.2);border:1px solid rgba(255,159,67,0.1);max-width:400px;width:90%;animation:popupIn 0.3s cubic-bezier(0.175,0.885,0.32,1.275) forwards;">
+                <div style="font-size:40px;margin-bottom:12px;">✏️</div>
+                <p style="font-size:16px;color:#5C4A1E;margin-bottom:20px;font-family:'Noto Sans SC',sans-serif;font-weight:600;">编辑照片文字</p>
+                <div style="text-align:left;margin-bottom:14px;">
+                    <label style="font-size:13px;color:#8B6914;font-weight:600;display:block;margin-bottom:6px;">标题</label>
+                    <input id="editTitle" type="text" value="${currentTitle}" maxlength="20" style="width:100%;padding:10px 14px;border:2px solid #FFE4B8;border-radius:12px;font-size:15px;font-family:'Noto Sans SC',sans-serif;color:#5C4A1E;outline:none;transition:border-color 0.3s;" onfocus="this.style.borderColor='#FF9F43'" onblur="this.style.borderColor='#FFE4B8'">
+                </div>
+                <div style="text-align:left;margin-bottom:24px;">
+                    <label style="font-size:13px;color:#8B6914;font-weight:600;display:block;margin-bottom:6px;">描述</label>
+                    <input id="editDesc" type="text" value="${currentDesc}" maxlength="50" style="width:100%;padding:10px 14px;border:2px solid #FFE4B8;border-radius:12px;font-size:14px;font-family:'Noto Sans SC',sans-serif;color:#8B6914;outline:none;transition:border-color 0.3s;" onfocus="this.style.borderColor='#FF9F43'" onblur="this.style.borderColor='#FFE4B8'">
+                </div>
+                <div style="display:flex;gap:12px;justify-content:center;">
+                    <button onclick="this.closest('div').parentElement.remove()" style="padding:10px 28px;border-radius:50px;border:1px solid #FFE4B8;background:white;color:#8B6914;font-size:15px;cursor:pointer;font-family:'Noto Sans SC',sans-serif;transition:all 0.3s ease;">取消</button>
+                    <button id="editSaveBtn" style="padding:10px 28px;border-radius:50px;border:none;background:linear-gradient(135deg,#FF9F43,#FF6B6B);color:white;font-size:15px;cursor:pointer;font-family:'Noto Sans SC',sans-serif;transition:all 0.3s ease;">保存</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+
+        // 保存
+        overlay.querySelector('#editSaveBtn').onclick = () => {
+            const newTitle = document.getElementById('editTitle').value.trim();
+            const newDesc = document.getElementById('editDesc').value.trim();
+            if (!newTitle) { document.getElementById('editTitle').style.borderColor = '#FF6B6B'; return; }
+            h4.textContent = newTitle;
+            p.textContent = newDesc;
+            // 保存到 localStorage
+            const captions = JSON.parse(localStorage.getItem('tutuCaptions') || '{}');
+            captions[itemIndex] = { title: newTitle, desc: newDesc };
+            localStorage.setItem('tutuCaptions', JSON.stringify(captions));
+            overlay.remove();
+            showToast('✅ 文字已更新');
+        };
+        // 点击遮罩取消
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) overlay.remove();
+        });
+    }
+
+    // 加载已保存的相册文字
+    function loadCaptions() {
+        const captions = JSON.parse(localStorage.getItem('tutuCaptions') || '{}');
+        const items = document.querySelectorAll('#galleryGrid .gallery-item');
+        items.forEach((item, idx) => {
+            if (captions[idx]) {
+                const h4 = item.querySelector('.gallery-caption h4');
+                const p = item.querySelector('.gallery-caption p');
+                if (h4) h4.textContent = captions[idx].title;
+                if (p) p.textContent = captions[idx].desc;
+            }
+        });
+    }
+    loadCaptions();
+
+    // 删除确认弹窗
+    function showDeleteConfirm(message, onConfirm) {
+        const overlay = document.createElement('div');
+        overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.4);z-index:2000;display:flex;align-items:center;justify-content:center;animation:fadeIn 0.2s ease;';
+        overlay.innerHTML = `
+            <div style="background:white;border-radius:20px;padding:32px 40px;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,0.2);border:1px solid rgba(255,159,67,0.1);max-width:360px;width:90%;animation:popupIn 0.3s cubic-bezier(0.175,0.885,0.32,1.275) forwards;">
+                <div style="font-size:48px;margin-bottom:12px;">🐱</div>
+                <p style="font-size:16px;color:#5C4A1E;margin-bottom:24px;font-family:'Noto Sans SC',sans-serif;">${message}</p>
+                <div style="display:flex;gap:12px;justify-content:center;">
+                    <button onclick="this.closest('div').parentElement.remove()" style="padding:10px 28px;border-radius:50px;border:1px solid #FFE4B8;background:white;color:#8B6914;font-size:15px;cursor:pointer;font-family:'Noto Sans SC',sans-serif;transition:all 0.3s ease;">取消</button>
+                    <button id="confirmDeleteBtn" style="padding:10px 28px;border-radius:50px;border:none;background:linear-gradient(135deg,#FF6B6B,#ee5a5a);color:white;font-size:15px;cursor:pointer;font-family:'Noto Sans SC',sans-serif;transition:all 0.3s ease;">删除</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+        // 点击确认
+        overlay.querySelector('#confirmDeleteBtn').onclick = () => {
+            overlay.remove();
+            onConfirm();
+        };
+        // 点击遮罩取消
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) overlay.remove();
+        });
+    }
+
+    // 加载已保存的照片（插入到上传卡片之前）
+    function loadSavedPhotos() {
+        const photos = JSON.parse(localStorage.getItem('tutuPhotos') || '[]');
+        const albumGrid = document.getElementById('galleryGrid');
+        const addCard = document.getElementById('addPhotoCard');
+        photos.forEach(photo => {
+            const albumItem = createAlbumPhotoEl(photo.src, photo.caption);
+            albumGrid.insertBefore(albumItem, addCard);
+        });
+    }
+    loadSavedPhotos();
+
+    // ==================== 图片查看器 ====================
+    function openViewer(src) {
+        document.getElementById('viewerImg').src = src;
+        document.getElementById('imageViewer').classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeViewer() {
+        document.getElementById('imageViewer').classList.remove('show');
+        document.body.style.overflow = '';
+    }
+
+    // ==================== 语录轮播 ====================
+    const quotes = [
+        { text: '本喵没有缺点，有缺点的都是你们人类！喵～', emoji: '😸' },
+        { text: '罐头呢？！我的罐头呢？！我要吃！', emoji: '😾' },
+        { text: '这个沙发不错…我来帮你拆了吧！', emoji: '😈' },
+        { text: '打你是爱你，懂不懂！', emoji: '😾' },
+        { text: '鱼干！猫条！罐头！全部都要！！', emoji: '🤤' },
+        { text: '你以为你在养我？其实是我在养你！', emoji: '😏' },
+        { text: '拆家是运动，运动是好事，不用谢。', emoji: '😆' },
+        { text: '本喵吃饭从不剩，这是对食物的尊重！', emoji: '😋' },
+        { text: '别碰我尾巴！不然咬你哦！', emoji: '😾' },
+        { text: '半夜跑酷是我的自由！你管不着！', emoji: '😼' },
+    ];
+    let currentQuote = 0;
+
+    function initQuotes() {
+        const nav = document.getElementById('quoteNav');
+        quotes.forEach((_, i) => {
+            const dot = document.createElement('button');
+            dot.className = 'quote-dot' + (i === 0 ? ' active' : '');
+            dot.onclick = () => showQuote(i);
+            nav.appendChild(dot);
+        });
+        setInterval(() => showQuote((currentQuote + 1) % quotes.length), 5000);
+    }
+
+    function showQuote(index) {
+        currentQuote = index;
+        const textEl = document.getElementById('quoteText');
+        const emojiEl = document.getElementById('quoteEmoji');
+        textEl.style.opacity = 0;
+        setTimeout(() => {
+            textEl.textContent = quotes[index].text;
+            emojiEl.textContent = quotes[index].emoji;
+            textEl.style.opacity = 1;
+        }, 300);
+        document.querySelectorAll('.quote-dot').forEach((d, i) => {
+            d.classList.toggle('active', i === index);
+        });
+    }
+    initQuotes();
+
+    // ==================== Toast ====================
+    function showToast(msg) {
+        const toast = document.getElementById('toast');
+        toast.textContent = msg;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    // ==================== 导航 & 滚动 ====================
+    function scrollToTop() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    window.addEventListener('scroll', () => {
+        const btn = document.getElementById('backToTop');
+        if (window.scrollY > 400) {
+            btn.classList.add('show');
+        } else {
+            btn.classList.remove('show');
+        }
+    });
+
+    function toggleMobileMenu() {
+        const links = document.querySelector('.nav-links');
+        if (links.style.display === 'flex') {
+            links.style.display = 'none';
+        } else {
+            links.style.display = 'flex';
+            links.style.position = 'absolute';
+            links.style.top = '100%';
+            links.style.left = '0';
+            links.style.right = '0';
+            links.style.background = 'rgba(255, 248, 231, 0.98)';
+            links.style.flexDirection = 'column';
+            links.style.padding = '20px';
+            links.style.gap = '12px';
+            links.style.borderBottom = '2px dashed var(--soft-orange)';
+        }
+    }
+
+    // 平滑滚动到板块
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                // 关闭移动菜单
+                const links = document.querySelector('.nav-links');
+                links.style.display = '';
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
