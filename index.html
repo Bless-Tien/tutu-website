@@ -28,6 +28,16 @@
             background: var(--white);
             color: var(--dark-brown);
             overflow-x: hidden;
+            cursor: url('photos/paw-cursor.png') 16 16, auto;
+        }
+
+        /* 悬停在可点击元素上时光标指向指尖 */
+        a, button, [onclick], input[type="text"], input[type="email"], input[type="password"],
+        .gallery-item img, .timeline-photo img, .add-photo-card, .timeline-upload-card,
+        .cat-agent-stage, .mood-btn, .trait-tag, .nav-auth-btn,
+        .upload-area, .edit-btn, .delete-btn, .close-auth,
+        .gallery-caption .edit-btn {
+            cursor: url('photos/paw-cursor.png') 16 16, pointer;
         }
 
         /* ========== 漂浮装饰 ========== */
