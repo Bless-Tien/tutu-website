@@ -895,43 +895,141 @@
             box-shadow: 0 4px 16px rgba(255, 159, 67, 0.3);
         }
 
-        /* 用户上传的照片展示 */
-        .user-gallery {
-            margin-top: 30px;
+        /* ========== 用户上传照片 - 时间轴 ========== */
+        .user-timeline {
+            margin-top: 36px;
+            position: relative;
+            padding-left: 40px;
+        }
+        .user-timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, #FFD699 0%, #FFECD2 30%, #FFD699 100%);
+            border-radius: 3px;
+        }
+
+        /* 时间节点（日期分组） */
+        .timeline-date-group {
+            position: relative;
+            margin-bottom: 32px;
+        }
+        .timeline-date-group:last-child {
+            margin-bottom: 0;
+        }
+
+        /* 日期标签 */
+        .timeline-date-label {
+            position: absolute;
+            left: -40px;
+            top: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+        }
+        .timeline-date-label .date-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FF9F43, #FF6B6B);
+            border: 3px solid white;
+            box-shadow: 0 0 0 2px rgba(255, 159, 67, 0.3), 0 2px 8px rgba(255, 107, 107, 0.2);
+            transition: transform 0.3s ease;
+        }
+        .timeline-date-group:first-child .date-dot {
+            width: 16px;
+            height: 16px;
+            box-shadow: 0 0 0 3px rgba(255, 159, 67, 0.3), 0 0 12px rgba(255, 107, 107, 0.3);
+        }
+
+        /* 日期文字 */
+        .timeline-date-text {
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 15px;
+            color: var(--deep-orange);
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .timeline-date-text::before {
+            content: '📅';
+            font-size: 16px;
+        }
+
+        /* 时间轴内的照片 grid */
+        .timeline-photos {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 16px;
         }
 
-        .gallery-item.uploaded-photo {
-            animation: fadeInUp 0.5s ease;
-        }
-
-        .user-photo {
+        /* 每张照片卡片 - 带时间 */
+        .timeline-photo {
             background: var(--white);
             border-radius: 16px;
             overflow: hidden;
             box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
             border: 1px solid rgba(255, 159, 67, 0.08);
-            animation: fadeInUp 0.5s ease;
             position: relative;
+            animation: fadeInUp 0.5s ease;
+            transition: all 0.4s ease;
         }
-
-        .user-photo img {
+        .timeline-photo:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+        }
+        .timeline-photo img {
             width: 100%;
             height: 180px;
             object-fit: cover;
+            display: block;
+            cursor: pointer;
+            transition: transform 0.4s ease;
         }
-
-        .user-photo .photo-caption {
-            padding: 12px;
+        .timeline-photo:hover img {
+            transform: scale(1.05);
+        }
+        .timeline-photo .photo-info {
+            padding: 10px 12px;
             text-align: center;
-            font-size: 14px;
-            color: var(--dark-brown);
-            font-weight: 500;
         }
-
-        .user-photo .delete-btn {
+        .timeline-photo .photo-title {
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 14px;
+            color: var(--deep-orange);
+            margin-bottom: 4px;
+        }
+        .timeline-photo .photo-desc {
+            font-size: 12px;
+            color: var(--warm-brown);
+            line-height: 1.5;
+            margin-bottom: 4px;
+        }
+        .timeline-photo .photo-time {
+            font-size: 11px;
+            color: #BFA88A;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+        .timeline-photo .photo-time::before {
+            content: '🕐';
+            font-size: 10px;
+        }
+        .timeline-photo .photo-uploader {
+            font-size: 11px;
+            color: var(--warm-brown);
+            opacity: 0.8;
+        }
+        .timeline-photo .delete-btn {
             position: absolute;
             top: 8px;
             right: 8px;
@@ -947,11 +1045,87 @@
             align-items: center;
             justify-content: center;
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            z-index: 5;
+        }
+        .timeline-photo:hover .delete-btn {
+            opacity: 1;
+        }
+        .timeline-photo .delete-btn:hover {
+            transform: scale(1.15);
+            background: #FF4444;
+        }
+        .timeline-photo .edit-btn {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            background: rgba(255, 159, 67, 0.15);
+            border: none;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            font-size: 12px;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+        }
+        .timeline-photo:hover .edit-btn {
+            opacity: 1;
+        }
+        .timeline-photo .edit-btn:hover {
+            transform: scale(1.15);
+            background: rgba(255, 159, 67, 0.3);
         }
 
-        .user-photo:hover .delete-btn {
-            opacity: 1;
+        /* 删除动画 */
+        .timeline-photo.deleting {
+            animation: deleteAnim 0.4s ease forwards;
+        }
+
+        /* 上传卡片（时间轴末尾） */
+        .timeline-upload-card {
+            grid-column: 1 / -1;
+            max-width: 320px;
+            cursor: pointer;
+            border: 2px dashed #FFD699;
+            background: rgba(255, 249, 235, 0.5);
+            border-radius: 16px;
+            padding: 32px 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+        .timeline-upload-card:hover {
+            border-color: #FF9F43;
+            background: rgba(255, 236, 179, 0.4);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(255, 159, 67, 0.12);
+        }
+        .timeline-upload-card.dragover {
+            border-color: #FF6B6B;
+            background: rgba(255, 182, 193, 0.2);
+        }
+        .timeline-upload-icon {
+            font-size: 40px;
+            margin-bottom: 8px;
+            animation: photoBounce 2s ease-in-out infinite;
+        }
+        .timeline-upload-card p {
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 15px;
+            color: var(--deep-orange);
+            margin-bottom: 4px;
+        }
+        .timeline-upload-card span {
+            font-size: 12px;
+            color: var(--warm-brown);
+            opacity: 0.7;
         }
 
         @keyframes fadeInUp {
@@ -2045,16 +2219,18 @@
                         <p>"伸个懒腰～又是想拆家的一天！"</p>
                     </div>
                 </div>
-                <!-- 上传照片卡片 -->
-                <div class="gallery-item add-photo-card" id="addPhotoCard" onclick="triggerUpload()" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
-                    <div class="add-photo-placeholder">
-                        <div class="add-photo-icon">📷</div>
-                        <p>上传新照片</p>
-                        <span>点击或拖拽</span>
-                    </div>
-                    <input type="file" class="upload-input" id="fileInput" accept="image/*" onchange="handleFileSelect(event)">
-                </div>
             </div>
+            <!-- 用户上传照片 - 时间轴 -->
+            <div class="user-timeline" id="userTimeline">
+                <!-- 时间轴内容由 JS 动态渲染 -->
+            </div>
+            <!-- 上传照片入口 -->
+            <div class="timeline-upload-card" id="addPhotoCard" onclick="triggerUpload()" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
+                <div class="timeline-upload-icon">📷</div>
+                <p>上传新照片</p>
+                <span>点击或拖拽图片到这里</span>
+            </div>
+            <input type="file" class="upload-input" id="fileInput" accept="image/*" onchange="handleFileSelect(event)">
         </div>
         <!-- 上传文字输入浮层 -->
         <div class="caption-float" id="captionFloat">
@@ -2740,14 +2916,15 @@
         try {
             // 压缩图片
             const base64 = await compressImage(pendingFile, 1200, 0.75);
-            // 保存到 Supabase 数据库
+            // 保存到 Supabase 数据库（带时间戳）
             const { data, error } = await sb
                 .from('photos')
                 .insert({
                     caption: caption,
                     image_data: base64,
                     uploader_name: currentUser.name,
-                    uploader_id: currentUser.id
+                    uploader_id: currentUser.id,
+                    photo_time: new Date().toISOString()
                 })
                 .select()
                 .single();
@@ -2755,7 +2932,7 @@
             if (error) throw error;
 
             // 立即在页面显示
-            addPhotoToGallery(base64, caption, currentUser.name);
+            renderTimeline();
             showToast('📸 照片上传成功！大家都能看到了～');
         } catch(err) {
             console.error('上传失败:', err);
@@ -2774,27 +2951,24 @@
         uploadBtn.disabled = false;
     }
 
-    // 从 Supabase 加载所有照片
-    async function loadSavedPhotos() {
-        try {
-            const { data, error } = await sb
-                .from('photos')
-                .select('*')
-                .order('created_at', { ascending: false });
+    const cuteDescs = [
+        '本喵今天也是美美哒～',
+        '这个角度拍得不错嘛！',
+        '不许偷拍！除非有罐头！',
+        '本喵的颜值无需滤镜～',
+        '今天心情很好，批准你撸一下',
+        '看什么看！没见过仙女猫吗！',
+        '这是突突帝国的官方写真集～',
+        '铲屎官的拍照技术退步了！',
+        '正在思考下一顿吃什么…',
+        '突突的盛世美颜营业中～',
+        '本喵允许你保存这张照片',
+        '别发了！本喵的隐私都要没了！',
+    ];
 
-            if (error) throw error;
-
-            const albumGrid = document.getElementById('galleryGrid');
-            const addCard = document.getElementById('addPhotoCard');
-            data.forEach(photo => {
-                const item = createAlbumPhotoEl(photo.image_data, photo.caption, photo.uploader_name);
-                albumGrid.insertBefore(item, addCard);
-            });
-        } catch(e) {
-            console.log('加载云端照片失败:', e);
-        }
+    function getRandomDesc() {
+        return cuteDescs[Math.floor(Math.random() * cuteDescs.length)];
     }
-    loadSavedPhotos();
 
     function showCaptionFloat() {
         const float = document.getElementById('captionFloat');
@@ -2827,55 +3001,203 @@
         }
     }
 
-    const cuteDescs = [
-        '本喵今天也是美美哒～',
-        '这个角度拍得不错嘛！',
-        '不许偷拍！除非有罐头！',
-        '本喵的颜值无需滤镜～',
-        '今天心情很好，批准你撸一下',
-        '看什么看！没见过仙女猫吗！',
-        '这是突突帝国的官方写真集～',
-        '铲屎官的拍照技术退步了！',
-        '正在思考下一顿吃什么…',
-        '突突的盛世美颜营业中～',
-        '本喵允许你保存这张照片',
-        '别发了！本喵的隐私都要没了！',
-    ];
+    // ==================== 时间轴渲染 ====================
 
-    function getRandomDesc() {
-        return cuteDescs[Math.floor(Math.random() * cuteDescs.length)];
+    // 格式化日期为友好显示
+    function formatDate(dateStr) {
+        const d = new Date(dateStr);
+        const now = new Date();
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const target = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+        const diff = today - target;
+
+        if (diff === 0) return '今天';
+        if (diff === 86400000) return '昨天';
+        if (diff === 86400000 * 2) return '前天';
+
+        const month = d.getMonth() + 1;
+        const day = d.getDate();
+        const weekdays = ['日', '一', '二', '三', '四', '五', '六'];
+        const weekday = weekdays[d.getDay()];
+
+        // 今年的不显示年份
+        if (d.getFullYear() === now.getFullYear()) {
+            return `${month}月${day}日 周${weekday}`;
+        }
+        return `${d.getFullYear()}年${month}月${day}日`;
     }
 
-    function addPhotoToGallery(src, caption, uploaderName) {
-        const albumGrid = document.getElementById('galleryGrid');
-        const addCard = document.getElementById('addPhotoCard');
-        const albumItem = createAlbumPhotoEl(src, caption, uploaderName);
-        albumGrid.insertBefore(albumItem, addCard);
+    // 格式化时间（小时:分钟）
+    function formatTime(dateStr) {
+        const d = new Date(dateStr);
+        return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
     }
 
-    function createAlbumPhotoEl(src, caption, uploaderName) {
+    // 按日期分组照片
+    function groupPhotosByDate(photos) {
+        const groups = {};
+        photos.forEach(photo => {
+            const d = new Date(photo.photo_time || photo.created_at);
+            const dateKey = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+            if (!groups[dateKey]) groups[dateKey] = { dateLabel: formatDate(d), dateKey, photos: [] };
+            groups[dateKey].photos.push(photo);
+        });
+        // 按日期降序排列
+        return Object.values(groups).sort((a, b) => b.dateKey.localeCompare(a.dateKey));
+    }
+
+    // 创建单张照片卡片元素
+    function createTimelinePhotoEl(photo) {
         const item = document.createElement('div');
-        item.className = 'gallery-item uploaded-photo';
-        const nameTag = uploaderName ? `<span style="font-size:11px;color:var(--warm-brown);opacity:0.8;">📷 ${uploaderName}</span>` : '';
+        item.className = 'timeline-photo';
+        const timeStr = photo.photo_time || photo.created_at;
+        const timeDisplay = formatTime(timeStr);
+        const desc = photo.desc || getRandomDesc();
+        const uploaderTag = photo.uploader_name ? `<div class="photo-uploader">📷 ${photo.uploader_name}</div>` : '';
+
         item.innerHTML = `
-            <img src="${src}" alt="${caption}" onclick="openViewer(this.src)" style="width:100%;height:220px;object-fit:cover;border-radius:12px 12px 0 0;cursor:pointer;">
-            <button class="delete-btn" onclick="deletePhoto(this)">✕</button>
-            <div class="gallery-caption">
-                <button class="edit-btn" onclick="editCaption(this)" title="编辑文字">✏️</button>
-                <h4>${caption}</h4>
-                <p>${getRandomDesc()}</p>
-                ${nameTag}
+            <img src="${photo.image_data}" alt="${photo.caption}" onclick="openViewer(this.src)">
+            <button class="delete-btn" onclick="deleteTimelinePhoto(this)" title="删除照片">✕</button>
+            <button class="edit-btn" onclick="editTimelineCaption(this)" title="编辑文字">✏️</button>
+            <div class="photo-info">
+                <div class="photo-title">${photo.caption}</div>
+                <div class="photo-desc">${desc}</div>
+                <div class="photo-time">${timeDisplay}</div>
+                ${uploaderTag}
             </div>
         `;
         return item;
     }
 
+    // 渲染完整时间轴
+    async function renderTimeline() {
+        try {
+            const { data, error } = await sb
+                .from('photos')
+                .select('*')
+                .order('photo_time', { ascending: false });
+
+            if (error) throw error;
+
+            const timeline = document.getElementById('userTimeline');
+            timeline.innerHTML = '';
+
+            if (!data || data.length === 0) {
+                timeline.style.display = 'none';
+                return;
+            }
+            timeline.style.display = 'block';
+
+            // 如果照片没有 photo_time 字段，用 created_at 兜底
+            data.forEach(p => {
+                if (!p.photo_time) p.photo_time = p.created_at;
+            });
+
+            const groups = groupPhotosByDate(data);
+
+            groups.forEach(group => {
+                const groupEl = document.createElement('div');
+                groupEl.className = 'timeline-date-group';
+
+                const labelEl = document.createElement('div');
+                labelEl.className = 'timeline-date-label';
+                labelEl.innerHTML = '<div class="date-dot"></div>';
+
+                const textEl = document.createElement('div');
+                textEl.className = 'timeline-date-text';
+                textEl.textContent = group.dateLabel;
+
+                const photosGrid = document.createElement('div');
+                photosGrid.className = 'timeline-photos';
+
+                group.photos.forEach(photo => {
+                    photosGrid.appendChild(createTimelinePhotoEl(photo));
+                });
+
+                groupEl.appendChild(labelEl);
+                groupEl.appendChild(textEl);
+                groupEl.appendChild(photosGrid);
+                timeline.appendChild(groupEl);
+            });
+        } catch(e) {
+            console.log('加载云端照片失败:', e);
+        }
+    }
+    renderTimeline();
+
+    function addPhotoToGallery(src, caption, uploaderName) {
+        // 旧接口兼容，直接重渲染时间轴
+        renderTimeline();
+    }
+
+    function createAlbumPhotoEl(src, caption, uploaderName) {
+        // 已废弃，保留空实现避免报错
+        const item = document.createElement('div');
+        return item;
+    }
+
     function deletePhoto(btn) {
+        deleteTimelinePhoto(btn);
+    }
+
+    function deleteTimelinePhoto(btn) {
         const photoEl = btn.parentElement;
-        showDeleteConfirm('确定要删除这张照片吗？', () => {
+        showDeleteConfirm('确定要删除这张照片吗？', async () => {
             photoEl.classList.add('deleting');
-            setTimeout(() => photoEl.remove(), 400);
-            showToast('🗑️ 照片已删除');
+            setTimeout(() => {
+                photoEl.remove();
+                showToast('🗑️ 照片已删除');
+                // 如果该日期组下没有照片了，移除日期组
+                const group = photoEl.closest('.timeline-date-group');
+                if (group && group.querySelectorAll('.timeline-photo').length <= 1) {
+                    group.style.transition = 'opacity 0.3s ease';
+                    group.style.opacity = '0';
+                    setTimeout(() => group.remove(), 300);
+                }
+            }, 400);
+        });
+    }
+
+    function editTimelineCaption(btn) {
+        const info = btn.parentElement.querySelector('.photo-info');
+        const titleEl = info.querySelector('.photo-title');
+        const descEl = info.querySelector('.photo-desc');
+        const currentTitle = titleEl.textContent;
+        const currentDesc = descEl.textContent;
+
+        const overlay = document.createElement('div');
+        overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.4);z-index:2000;display:flex;align-items:center;justify-content:center;animation:fadeIn 0.2s ease;';
+        overlay.innerHTML = `
+            <div style="background:white;border-radius:20px;padding:32px 40px;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,0.2);border:1px solid rgba(255,159,67,0.1);max-width:400px;width:90%;animation:popupIn 0.3s cubic-bezier(0.175,0.885,0.32,1.275) forwards;">
+                <div style="font-size:40px;margin-bottom:12px;">✏️</div>
+                <p style="font-size:16px;color:#5C4A1E;margin-bottom:20px;font-family:'Noto Sans SC',sans-serif;font-weight:600;">编辑照片文字</p>
+                <div style="text-align:left;margin-bottom:14px;">
+                    <label style="font-size:13px;color:#8B6914;font-weight:600;display:block;margin-bottom:6px;">标题</label>
+                    <input id="editTitle" type="text" value="${currentTitle}" maxlength="20" style="width:100%;padding:10px 14px;border:2px solid #FFE4B8;border-radius:12px;font-size:15px;font-family:'Noto Sans SC',sans-serif;color:#5C4A1E;outline:none;transition:border-color 0.3s;" onfocus="this.style.borderColor='#FF9F43'" onblur="this.style.borderColor='#FFE4B8'">
+                </div>
+                <div style="text-align:left;margin-bottom:24px;">
+                    <label style="font-size:13px;color:#8B6914;font-weight:600;display:block;margin-bottom:6px;">描述</label>
+                    <input id="editDesc" type="text" value="${currentDesc}" maxlength="50" style="width:100%;padding:10px 14px;border:2px solid #FFE4B8;border-radius:12px;font-size:14px;font-family:'Noto Sans SC',sans-serif;color:#8B6914;outline:none;transition:border-color 0.3s;" onfocus="this.style.borderColor='#FF9F43'" onblur="this.style.borderColor='#FFE4B8'">
+                </div>
+                <div style="display:flex;gap:12px;justify-content:center;">
+                    <button onclick="this.closest('div').parentElement.remove()" style="padding:10px 28px;border-radius:50px;border:1px solid #FFE4B8;background:white;color:#8B6914;font-size:15px;cursor:pointer;font-family:'Noto Sans SC',sans-serif;transition:all 0.3s ease;">取消</button>
+                    <button id="editSaveBtn" style="padding:10px 28px;border-radius:50px;border:none;background:linear-gradient(135deg,#FF9F43,#FF6B6B);color:white;font-size:15px;cursor:pointer;font-family:'Noto Sans SC',sans-serif;transition:all 0.3s ease;">保存</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+
+        overlay.querySelector('#editSaveBtn').onclick = () => {
+            const newTitle = document.getElementById('editTitle').value.trim();
+            const newDesc = document.getElementById('editDesc').value.trim();
+            if (!newTitle) { document.getElementById('editTitle').style.borderColor = '#FF6B6B'; return; }
+            titleEl.textContent = newTitle;
+            descEl.textContent = newDesc;
+            overlay.remove();
+            showToast('✅ 文字已更新');
+        };
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) overlay.remove();
         });
     }
 
