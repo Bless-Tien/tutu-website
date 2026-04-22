@@ -1848,12 +1848,12 @@
         }, 2000);
     }
 
-    // ==================== 云端照片共享 ====================
+    // ==================== 云端照片共享（无需密钥） ====================
+    // 上传照片：imgbb 图床 → 打开 GitHub Issue 页面提交（无需 Token）
+    // 读取照片：从公开仓库 Issues 中读取（无需 Token）
+    const GITHUB_API = 'https://api.github.com/repos/Bless-Tien/tutu-website';
     const IMGBB_API = 'https://api.imgbb.com/1/upload';
     const IMGBB_KEY = 'd57a9c19f52b88c0c9e83e3e2ec3fbb0';
-    const JSONBIN_API = 'https://api.jsonbin.io/v3';
-    const JSONBIN_KEY = '$2a$10$Z3kL8qF6nN4w.mKJfGJw.uRs5PmLHbEdXQqSKr0c5VQzHxRAeG6eG';
-    const JSONBIN_BIN_ID = 'tutu-photos-shared';
 
     let pendingFile = null;
 
@@ -1900,7 +1900,7 @@
         });
     }
 
-    // 上传图片到 imgbb
+    // 上传图片到 imgbb（免费图床）
     async function uploadToImgbb(file) {
         const base64 = await compressImage(file, 1200, 0.75);
         const form = new FormData();
@@ -1912,32 +1912,33 @@
         throw new Error('图片上传失败');
     }
 
-    // 获取云端照片列表
+    // 从公开仓库 Issues 读取所有照片
     async function fetchCloudPhotos() {
         try {
-            const resp = await fetch(`${JSONBIN_API}/b/${JSONBIN_BIN_ID}/latest`, {
-                headers: { 'X-Access-Key': JSONBIN_KEY }
+            const resp = await fetch(`${GITHUB_API}/issues?labels=tutu-photo&state=all&per_page=100`, {
+                headers: { 'Accept': 'application/vnd.github.v3+json' }
             });
             if (resp.ok) {
-                const data = await resp.json();
-                return data.record?.photos || [];
+                const issues = await resp.json();
+                return issues.filter(i => i.number !== 1).map(i => {
+                    try {
+                        const data = JSON.parse(i.body || '{}');
+                        return { src: data.src || '', caption: data.caption || i.title, time: data.time || new Date(i.created_at).getTime() };
+                    } catch(e) {
+                        return { src: '', caption: i.title, time: 0 };
+                    }
+                }).filter(p => p.src).sort((a, b) => b.time - a.time);
             }
-        } catch(e) {}
+        } catch(e) { console.log('加载云端照片失败:', e); }
         return [];
     }
 
-    // 保存照片列表到云端
-    async function saveCloudPhotos(photos) {
-        try {
-            await fetch(`${JSONBIN_API}/b/${JSONBIN_BIN_ID}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Access-Key': JSONBIN_KEY
-                },
-                body: JSON.stringify({ photos })
-            });
-        } catch(e) {}
+    // 提交照片到 GitHub Issue（打开页面让用户点提交，无需 Token）
+    function submitPhotoToGitHub(imgUrl, caption) {
+        const body = encodeURIComponent(JSON.stringify({ src: imgUrl, caption, time: Date.now() }));
+        const title = encodeURIComponent('📸 ' + caption);
+        const url = `https://github.com/Bless-Tien/tutu-website/issues/new?title=${title}&body=${body}&labels=tutu-photo`;
+        window.open(url, '_blank');
     }
 
     // 确认上传（云端版）
@@ -1954,16 +1955,13 @@
         try {
             // 上传图片到图床
             const imgUrl = await uploadToImgbb(pendingFile);
-            // 添加到云端
-            const photos = await fetchCloudPhotos();
-            photos.unshift({ src: imgUrl, caption, time: Date.now() });
-            if (photos.length > 50) photos.length = 50;
-            await saveCloudPhotos(photos);
-            // 显示在页面
+            // 显示在当前页面
             addPhotoToGallery(imgUrl, caption);
-            showToast('📸 上传成功！所有人都能看到啦～');
+            showToast('📸 图片已上传！请在新打开的页面点击提交按钮，所有人就能看到了～');
+            // 打开 GitHub Issue 页面让用户提交（需要登录 GitHub）
+            submitPhotoToGitHub(imgUrl, caption);
         } catch(err) {
-            showToast('❌ 上传失败，请重试');
+            showToast('❌ 图片上传失败，请重试');
         }
 
         pendingFile = null;
