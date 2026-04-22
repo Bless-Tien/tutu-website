@@ -1449,428 +1449,132 @@
             to { opacity: 1; }
         }
 
-        /* ========== 3D 猫咪智能体 ========== */
+        /* ========== SVG 猫咪智能体 ========== */
         .cat-agent-container {
-            perspective: 800px;
             display: flex;
             flex-direction: column;
             align-items: center;
             margin: 30px auto;
-            padding: 20px 0 10px;
-            background: rgba(255,255,255,0.6);
-            border-radius: 24px;
-            border: 2px dashed rgba(255,159,67,0.2);
+            padding: 20px 30px 10px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.7), rgba(255,249,236,0.5));
+            border-radius: 28px;
+            border: 2px solid rgba(255,159,67,0.15);
+            box-shadow: 0 4px 24px rgba(255,159,67,0.08);
             user-select: none;
             -webkit-user-select: none;
+            position: relative;
         }
 
         .cat-agent-stage {
-            width: 260px;
-            height: 300px;
+            width: 280px;
+            height: 320px;
             position: relative;
-            transform-style: preserve-3d;
             cursor: pointer;
-        }
-
-        /* 猫咪身体 */
-        .cat-body {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 150px;
-            height: 110px;
-            background: linear-gradient(145deg, #F0C888, #E0B57A);
-            border-radius: 50% 50% 45% 45%;
-            box-shadow: inset 0 -20px 30px rgba(160,110,50,0.2), 0 8px 20px rgba(0,0,0,0.1);
-            transition: all 0.5s ease;
-        }
-
-        /* 三色花纹 */
-        .cat-body::before {
-            content: '';
-            position: absolute;
-            top: 15%;
-            left: 20%;
-            width: 28%;
-            height: 30%;
-            background: #C87840;
-            border-radius: 50% 40% 50% 40%;
-            opacity: 0.7;
-        }
-        .cat-body::after {
-            content: '';
-            position: absolute;
-            top: 20%;
-            right: 18%;
-            width: 22%;
-            height: 25%;
-            background: #A85530;
-            border-radius: 40% 50% 40% 50%;
-            opacity: 0.6;
-        }
-
-        /* 猫咪花纹块 */
-        .cat-patch-1 {
-            position: absolute;
-            bottom: 55px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 40px;
-            height: 22px;
-            background: #C87840;
-            border-radius: 50%;
-            opacity: 0.5;
-            z-index: 1;
-        }
-
-        /* 猫头 */
-        .cat-head {
-            position: absolute;
-            bottom: 110px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 140px;
-            height: 125px;
-            background: linear-gradient(160deg, #F2D4A6, #E4C088);
-            border-radius: 50% 50% 45% 45%;
-            box-shadow: inset 0 -10px 20px rgba(160,110,50,0.12), 0 4px 16px rgba(0,0,0,0.08);
-            z-index: 3;
-            transition: all 0.5s ease;
-            transform-origin: center bottom;
-        }
-
-        /* 头部三色块 */
-        .cat-head-patch {
-            position: absolute;
-            background: #D4884A;
-            border-radius: 50%;
-            opacity: 0.6;
-        }
-        .cat-head-patch.p1 {
-            top: 15%; left: 12%; width: 22px; height: 18px;
-        }
-        .cat-head-patch.p2 {
-            top: 25%; right: 10%; width: 18px; height: 15px;
-            background: #C06A3A;
-        }
-
-        /* 耳朵 */
-        .cat-ear {
-            position: absolute;
-            bottom: 210px;
-            width: 0;
-            height: 0;
-            z-index: 2;
-            transition: all 0.4s ease;
-        }
-        .cat-ear.left {
-            left: 50px;
-            border-left: 22px solid transparent;
-            border-right: 22px solid transparent;
-            border-bottom: 48px solid #E4C088;
-            transform: rotate(-15deg);
-        }
-        .cat-ear.right {
-            right: 50px;
-            border-left: 22px solid transparent;
-            border-right: 22px solid transparent;
-            border-bottom: 48px solid #E4C088;
-            transform: rotate(15deg);
-        }
-        /* 耳朵内部 */
-        .cat-ear::after {
-            content: '';
-            position: absolute;
-            top: 10px;
-            left: -10px;
-            width: 0;
-            height: 0;
-            border-left: 10px solid transparent;
-            border-right: 10px solid transparent;
-            border-bottom: 24px solid #FFB6C1;
-        }
-
-        /* 眼睛 */
-        .cat-eyes {
-            position: absolute;
-            bottom: 155px;
-            left: 50%;
-            transform: translateX(-50%);
             display: flex;
-            gap: 32px;
-            z-index: 4;
-        }
-        .cat-eye {
-            width: 28px;
-            height: 28px;
-            background: white;
-            border-radius: 50%;
-            position: relative;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.1);
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-        .cat-pupil {
-            width: 16px;
-            height: 16px;
-            background: #3A2A18;
-            border-radius: 50%;
-            position: absolute;
-            top: 7px;
-            left: 6px;
-            transition: all 0.3s ease;
-        }
-        .cat-pupil::after {
-            content: '';
-            width: 6px;
-            height: 6px;
-            background: white;
-            border-radius: 50%;
-            position: absolute;
-            top: 2px;
-            left: 2px;
+            justify-content: center;
+            align-items: center;
         }
 
-        /* 开心眼睛（弯弯的） */
-        .cat-agent-stage.mood-happy .cat-eye {
-            height: 8px;
-            border-radius: 10px 10px 0 0;
-            background: #4A3728;
-            overflow: hidden;
-            top: 4px;
-        }
-        .cat-agent-stage.mood-happy .cat-pupil { display: none; }
-
-        /* 睡觉眼睛（闭合横线） */
-        .cat-agent-stage.mood-sleep .cat-eye {
-            height: 4px;
-            border-radius: 2px;
-            background: #4A3728;
-            top: 10px;
-        }
-        .cat-agent-stage.mood-sleep .cat-pupil { display: none; }
-
-        /* 低落眼睛（半闭） */
-        .cat-agent-stage.mood-sad .cat-eye {
-            height: 14px;
-            border-radius: 50%;
-        }
-        .cat-agent-stage.mood-sad .cat-pupil {
-            width: 12px;
-            height: 12px;
-            top: 1px;
-            left: 6px;
+        .cat-agent-stage svg {
+            width: 260px;
+            height: 290px;
+            transition: transform 0.3s ease;
+            filter: drop-shadow(0 4px 12px rgba(200,120,64,0.15));
         }
 
-        /* 发呆眼睛（一大一小） */
-        .cat-agent-stage.mood-daze .cat-eye:first-child {
-            width: 26px; height: 26px;
-        }
-        .cat-agent-stage.mood-daze .cat-eye:last-child {
-            width: 20px; height: 20px;
-            top: 2px;
-        }
-        .cat-agent-stage.mood-daze .cat-pupil {
-            transform: translateY(-3px);
+        .cat-agent-stage:hover svg {
+            transform: scale(1.03);
         }
 
-        /* 饿肚子眼睛（闪闪发光） */
-        .cat-agent-stage.mood-hungry .cat-pupil {
-            width: 16px;
-            height: 16px;
-            background: #2D1F14;
-        }
-        .cat-agent-stage.mood-hungry .cat-pupil::after {
-            width: 7px;
-            height: 7px;
+        /* SVG 元素动画基础 */
+        .svg-tail { transform-origin: 195px 240px; animation: svgTailWag 2.5s ease-in-out infinite; }
+        @keyframes svgTailWag {
+            0%, 100% { transform: rotate(-8deg); }
+            50% { transform: rotate(12deg); }
         }
 
-        /* 鼻子 */
-        .cat-nose {
-            position: absolute;
-            bottom: 138px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 12px;
-            height: 9px;
-            background: #FF9999;
-            border-radius: 50% 50% 50% 50% / 30% 30% 70% 70%;
-            z-index: 5;
+        /* 情绪状态变化 */
+        .cat-agent-stage.mood-happy .svg-tail { animation: svgHappyTail 0.6s ease-in-out infinite; }
+        @keyframes svgHappyTail {
+            0%, 100% { transform: rotate(-15deg); }
+            50% { transform: rotate(25deg); }
         }
 
-        /* 嘴巴 */
-        .cat-mouth {
-            position: absolute;
-            bottom: 122px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 5;
-            transition: all 0.3s ease;
-        }
-        .cat-mouth-line {
-            width: 2px;
-            height: 10px;
-            background: #4A3728;
-            margin: 0 auto;
-            border-radius: 1px;
-        }
-        .cat-mouth-left, .cat-mouth-right {
-            position: absolute;
-            top: 0;
-            width: 14px;
-            height: 12px;
-            border: 2px solid #4A3728;
-            border-top: none;
-            border-radius: 0 0 50% 50%;
-        }
-        .cat-mouth-left { right: 2px; transform: rotate(-5deg); }
-        .cat-mouth-right { left: 2px; transform: rotate(5deg); }
-
-        /* 开心嘴巴 */
-        .cat-agent-stage.mood-happy .cat-mouth-left,
-        .cat-agent-stage.mood-happy .cat-mouth-right {
-            width: 16px;
-            height: 12px;
-            border-width: 2px;
+        .cat-agent-stage.mood-sleep .svg-tail { animation: svgSleepTail 4s ease-in-out infinite; }
+        @keyframes svgSleepTail {
+            0%, 100% { transform: rotate(-3deg); }
+            50% { transform: rotate(3deg); }
         }
 
-        /* 低落嘴巴（下弯） */
-        .cat-agent-stage.mood-sad .cat-mouth-left,
-        .cat-agent-stage.mood-sad .cat-mouth-right {
-            border-bottom: none;
-            border-top: 2px solid #4A3728;
-            border-radius: 50% 50% 0 0;
-            top: 4px;
+        .cat-agent-stage.mood-sad .svg-tail { animation: svgSadTail 3s ease-in-out infinite; }
+        @keyframes svgSadTail {
+            0%, 100% { transform: rotate(-4deg); }
+            50% { transform: rotate(0deg); }
         }
 
-        /* 饿嘴巴（张嘴） */
-        .cat-agent-stage.mood-hungry .cat-mouth {
-            transform: translateX(-50%) scaleY(1.4);
+        /* 开心：整体轻微弹跳 */
+        .cat-agent-stage.mood-happy .cat-svgbody {
+            animation: svgHappyBounce 1.2s ease-in-out infinite;
+        }
+        @keyframes svgHappyBounce {
+            0%, 100% { transform: translateY(0); }
+            40%, 60% { transform: translateY(-6px); }
         }
 
-        /* 睡觉嘴巴（小圆） */
-        .cat-agent-stage.mood-sleep .cat-mouth-left,
-        .cat-agent-stage.mood-sleep .cat-mouth-right {
-            width: 14px; height: 8px;
+        /* 睡觉：身体呼吸 */
+        .cat-agent-stage.mood-sleep .cat-svgbody {
+            animation: svgSleepBreathe 3.5s ease-in-out infinite;
+        }
+        @keyframes svgSleepBreathe {
+            0%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(1.03); }
         }
 
-        /* 腮红 */
-        .cat-blush {
-            position: absolute;
-            bottom: 142px;
-            width: 24px;
-            height: 12px;
-            background: rgba(255,150,170,0.5);
-            border-radius: 50%;
-            z-index: 4;
-            transition: opacity 0.3s;
+        /* 发呆：头微晃 */
+        .cat-agent-stage.mood-daze .cat-svghead {
+            animation: svgDazeWobble 4s ease-in-out infinite;
+            transform-origin: 130px 145px;
         }
-        .cat-blush.left { left: 30px; }
-        .cat-blush.right { right: 30px; }
-
-        .cat-agent-stage.mood-happy .cat-blush {
-            background: rgba(255,150,170,0.7);
-        }
-        .cat-agent-stage.mood-sad .cat-blush {
-            opacity: 0.3;
+        @keyframes svgDazeWobble {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(3deg); }
+            75% { transform: rotate(-3deg); }
         }
 
-        /* 胡须 */
-        .cat-whiskers {
-            position: absolute;
-            bottom: 130px;
-            z-index: 6;
+        /* 饿肚子：身体微胀 */
+        .cat-agent-stage.mood-hungry .cat-svgbody {
+            animation: svgHungryPulse 1.5s ease-in-out infinite;
         }
-        .cat-whiskers.left-whisker { left: 8px; }
-        .cat-whiskers.right-whisker { right: 8px; }
-        .cat-whisker {
-            width: 30px;
-            height: 1.5px;
-            background: rgba(74,55,40,0.3);
-            margin: 4px 0;
-            border-radius: 1px;
-            transition: transform 0.3s;
-        }
-        .cat-whiskers.left-whisker .cat-whisker:first-child { transform: rotate(-5deg); }
-        .cat-whiskers.left-whisker .cat-whisker:last-child { transform: rotate(5deg); }
-        .cat-whiskers.right-whisker .cat-whisker:first-child { transform: rotate(5deg); }
-        .cat-whiskers.right-whisker .cat-whisker:last-child { transform: rotate(-5deg); }
-
-        /* 前爪 */
-        .cat-paws {
-            position: absolute;
-            bottom: 12px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 45px;
-            z-index: 2;
-        }
-        .cat-paw {
-            width: 32px;
-            height: 20px;
-            background: linear-gradient(180deg, #F0C888, #E0B57A);
-            border-radius: 50% 50% 45% 45%;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
-        }
-        .cat-paw::after {
-            content: '';
-            position: absolute;
-            bottom: 2px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 16px;
-            height: 8px;
-            background: #FFB6C1;
-            border-radius: 50%;
-            opacity: 0.5;
+        @keyframes svgHungryPulse {
+            0%, 100% { transform: scaleY(1) scaleX(1); }
+            50% { transform: scaleY(1.04) scaleX(1.02); }
         }
 
-        /* 尾巴 */
-        .cat-tail {
-            position: absolute;
-            bottom: 50px;
-            right: 22px;
-            width: 55px;
-            height: 80px;
-            border: 6px solid transparent;
-            border-right: 6px solid #C87840;
-            border-top: 6px solid #C87840;
-            border-radius: 0 50% 0 0;
-            z-index: 1;
-            transform-origin: bottom left;
-            animation: tailWag 2s ease-in-out infinite;
-            transition: all 0.5s ease;
-        }
+        /* 低落：耳朵下垂 */
+        .cat-agent-stage.mood-sad .ear-left { transform: rotate(-25deg); transform-origin: 78px 60px; transition: transform 0.5s; }
+        .cat-agent-stage.mood-sad .ear-right { transform: rotate(25deg); transform-origin: 182px 60px; transition: transform 0.5s; }
 
-        @keyframes tailWag {
-            0%, 100% { transform: rotate(-10deg); }
-            50% { transform: rotate(15deg); }
+        /* 被摸了的反应 */
+        .cat-agent-stage.petted .cat-svghead {
+            animation: svgPetShake 0.5s ease;
+            transform-origin: 130px 145px;
         }
-
-        /* 猫咪阴影 */
-        .cat-shadow {
-            position: absolute;
-            bottom: 5px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 160px;
-            height: 18px;
-            background: radial-gradient(ellipse, rgba(0,0,0,0.12) 0%, transparent 70%);
-            border-radius: 50%;
+        @keyframes svgPetShake {
+            0% { transform: rotate(0deg); }
+            30% { transform: rotate(8deg); }
+            60% { transform: rotate(-6deg); }
+            100% { transform: rotate(0deg); }
         }
 
         /* 情绪气泡 */
         .mood-bubble {
             position: absolute;
-            top: -10px;
-            right: -20px;
+            top: -5px;
+            right: -10px;
             background: white;
             border-radius: 20px;
             padding: 6px 14px;
-            font-size: 20px;
+            font-size: 22px;
             box-shadow: 0 3px 12px rgba(0,0,0,0.08);
             border: 2px solid rgba(255,159,67,0.2);
             z-index: 10;
@@ -1901,8 +1605,8 @@
         /* 情绪文字气泡 */
         .mood-text {
             position: absolute;
-            top: 25px;
-            right: -40px;
+            top: 30px;
+            right: -30px;
             background: white;
             border-radius: 16px;
             padding: 8px 16px;
@@ -1912,7 +1616,7 @@
             box-shadow: 0 3px 12px rgba(0,0,0,0.06);
             border: 2px solid rgba(255,159,67,0.15);
             z-index: 10;
-            max-width: 160px;
+            max-width: 170px;
             text-align: center;
             opacity: 0;
             transform: scale(0.5) translateY(10px);
@@ -1963,8 +1667,8 @@
         /* 睡觉 ZZZ */
         .sleep-zzz {
             position: absolute;
-            top: 10px;
-            right: 10px;
+            top: 15px;
+            right: 15px;
             font-family: 'ZCOOL KuaiLe', cursive;
             font-size: 18px;
             color: #8B9DC3;
@@ -1985,83 +1689,6 @@
             100% { opacity: 0; transform: translateY(-30px) translateX(10px); }
         }
 
-        /* 饿肚子动画 */
-        .cat-agent-stage.mood-hungry .cat-body {
-            animation: hungryBounce 1s ease-in-out infinite;
-        }
-        @keyframes hungryBounce {
-            0%, 100% { transform: translateX(-50%) scaleY(1); }
-            50% { transform: translateX(-50%) scaleY(1.03); }
-        }
-
-        /* 睡觉呼吸 */
-        .cat-agent-stage.mood-sleep .cat-body {
-            animation: sleepBreathe 3s ease-in-out infinite;
-        }
-        .cat-agent-stage.mood-sleep .cat-head {
-            animation: sleepBreathe 3s ease-in-out infinite;
-        }
-        @keyframes sleepBreathe {
-            0%, 100% { transform: translateX(-50%) scaleY(1); }
-            50% { transform: translateX(-50%) scaleY(1.04); }
-        }
-
-        /* 发呆轻微摇晃 */
-        .cat-agent-stage.mood-daze .cat-head {
-            animation: dazeWobble 3s ease-in-out infinite;
-        }
-        @keyframes dazeWobble {
-            0%, 100% { transform: translateX(-50%) rotate(0deg); }
-            25% { transform: translateX(-50%) rotate(2deg); }
-            75% { transform: translateX(-50%) rotate(-2deg); }
-        }
-
-        /* 低落下垂 */
-        .cat-agent-stage.mood-sad .cat-ear.left {
-            transform: rotate(-25deg) scaleY(0.85);
-        }
-        .cat-agent-stage.mood-sad .cat-ear.right {
-            transform: rotate(25deg) scaleY(0.85);
-        }
-        .cat-agent-stage.mood-sad .cat-head {
-            transform: translateX(-50%) translateY(4px);
-        }
-        .cat-agent-stage.mood-sad .cat-tail {
-            animation: sadTail 3s ease-in-out infinite;
-        }
-        @keyframes sadTail {
-            0%, 100% { transform: rotate(-5deg); }
-            50% { transform: rotate(0deg); }
-        }
-
-        /* 开心跳动 */
-        .cat-agent-stage.mood-happy .cat-body {
-            animation: happyBounce 1.2s ease-in-out infinite;
-        }
-        @keyframes happyBounce {
-            0%, 100% { transform: translateX(-50%) translateY(0); }
-            40% { transform: translateX(-50%) translateY(-5px); }
-            60% { transform: translateX(-50%) translateY(-5px); }
-        }
-        .cat-agent-stage.mood-happy .cat-tail {
-            animation: happyTail 0.6s ease-in-out infinite;
-        }
-        @keyframes happyTail {
-            0%, 100% { transform: rotate(-15deg); }
-            50% { transform: rotate(25deg); }
-        }
-
-        /* 被摸了的反应 */
-        .cat-agent-stage.petted .cat-head {
-            animation: petReaction 0.5s ease;
-        }
-        @keyframes petReaction {
-            0% { transform: translateX(-50%); }
-            30% { transform: translateX(-50%) rotate(8deg); }
-            60% { transform: translateX(-50%) rotate(-6deg); }
-            100% { transform: translateX(-50%) rotate(0deg); }
-        }
-
         /* 爱心飘出 */
         .cat-love-burst {
             position: absolute;
@@ -2078,7 +1705,7 @@
 
         /* 响应式 */
         @media (max-width: 768px) {
-            .cat-agent-stage { transform: scale(0.85); }
+            .cat-agent-stage svg { width: 220px; height: 245px; }
             .mood-text { right: -20px; font-size: 12px; max-width: 130px; }
         }
     </style>
@@ -2260,7 +1887,7 @@
                 <div class="divider"></div>
             </div>
 
-            <!-- 3D 猫咪智能体 -->
+            <!-- SVG 猫咪智能体 -->
             <div class="cat-agent-container">
                 <div class="cat-agent-stage" id="catAgent" onclick="petCatAgent(event)">
                     <!-- 睡觉 ZZZ -->
@@ -2268,53 +1895,148 @@
                     <!-- 情绪气泡 -->
                     <div class="mood-bubble" id="moodBubble">😊</div>
                     <div class="mood-text" id="moodText">突突在发呆中...</div>
-                    <!-- 耳朵 -->
-                    <div class="cat-ear left"></div>
-                    <div class="cat-ear right"></div>
-                    <!-- 头 -->
-                    <div class="cat-head">
-                        <div class="cat-head-patch p1"></div>
-                        <div class="cat-head-patch p2"></div>
-                    </div>
-                    <!-- 眼睛 -->
-                    <div class="cat-eyes">
-                        <div class="cat-eye"><div class="cat-pupil"></div></div>
-                        <div class="cat-eye"><div class="cat-pupil"></div></div>
-                    </div>
-                    <!-- 腮红 -->
-                    <div class="cat-blush left"></div>
-                    <div class="cat-blush right"></div>
-                    <!-- 胡须 -->
-                    <div class="cat-whiskers left-whisker">
-                        <div class="cat-whisker"></div>
-                        <div class="cat-whisker"></div>
-                        <div class="cat-whisker"></div>
-                    </div>
-                    <div class="cat-whiskers right-whisker">
-                        <div class="cat-whisker"></div>
-                        <div class="cat-whisker"></div>
-                        <div class="cat-whisker"></div>
-                    </div>
-                    <!-- 鼻子 -->
-                    <div class="cat-nose"></div>
-                    <!-- 嘴巴 -->
-                    <div class="cat-mouth">
-                        <div class="cat-mouth-left"></div>
-                        <div class="cat-mouth-right"></div>
-                        <div class="cat-mouth-line"></div>
-                    </div>
-                    <!-- 身体 -->
-                    <div class="cat-body"></div>
-                    <div class="cat-patch-1"></div>
-                    <!-- 前爪 -->
-                    <div class="cat-paws">
-                        <div class="cat-paw"></div>
-                        <div class="cat-paw"></div>
-                    </div>
-                    <!-- 尾巴 -->
-                    <div class="cat-tail"></div>
-                    <!-- 阴影 -->
-                    <div class="cat-shadow"></div>
+                    <!-- SVG 猫咪 -->
+                    <svg viewBox="0 0 260 290" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <radialGradient id="bodyGrad" cx="50%" cy="40%" r="55%">
+                                <stop offset="0%" stop-color="#F5D6A0"/>
+                                <stop offset="70%" stop-color="#EABC78"/>
+                                <stop offset="100%" stop-color="#D4A05A"/>
+                            </radialGradient>
+                            <radialGradient id="headGrad" cx="50%" cy="40%" r="55%">
+                                <stop offset="0%" stop-color="#F8DCAF"/>
+                                <stop offset="65%" stop-color="#ECC08A"/>
+                                <stop offset="100%" stop-color="#D8A86C"/>
+                            </radialGradient>
+                            <radialGradient id="cheekGrad" cx="50%" cy="50%" r="50%">
+                                <stop offset="0%" stop-color="rgba(255,160,180,0.6)"/>
+                                <stop offset="100%" stop-color="rgba(255,160,180,0)"/>
+                            </radialGradient>
+                            <radialGradient id="eyeGrad" cx="40%" cy="35%" r="60%">
+                                <stop offset="0%" stop-color="#7ECB5A"/>
+                                <stop offset="50%" stop-color="#4A9E30"/>
+                                <stop offset="100%" stop-color="#2D7A1A"/>
+                            </radialGradient>
+                            <radialGradient id="pupilGrad" cx="45%" cy="40%" r="50%">
+                                <stop offset="0%" stop-color="#1A1A1A"/>
+                                <stop offset="100%" stop-color="#333"/>
+                            </radialGradient>
+                            <linearGradient id="earInner" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stop-color="#FFB0C4"/>
+                                <stop offset="100%" stop-color="#FF9AAF"/>
+                            </linearGradient>
+                            <linearGradient id="bellyGrad" x1="50%" y1="0%" x2="50%" y2="100%">
+                                <stop offset="0%" stop-color="#FFF8F0"/>
+                                <stop offset="100%" stop-color="#F5E6D0"/>
+                            </linearGradient>
+                            <linearGradient id="pawGrad" x1="50%" y1="0%" x2="50%" y2="100%">
+                                <stop offset="0%" stop-color="#F0CFA0"/>
+                                <stop offset="100%" stop-color="#E0B880"/>
+                            </linearGradient>
+                            <filter id="catShadow" x="-20%" y="-20%" width="140%" height="140%">
+                                <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="rgba(180,120,60,0.15)"/>
+                            </filter>
+                        </defs>
+
+                        <g class="cat-svgbody">
+                            <!-- 尾巴 -->
+                            <g class="svg-tail">
+                                <path d="M190 245 Q215 220 210 190 Q205 165 220 150 Q230 140 228 130" fill="none" stroke="#C8843C" stroke-width="10" stroke-linecap="round"/>
+                                <path d="M220 150 Q230 140 228 130" fill="none" stroke="#D4A050" stroke-width="10" stroke-linecap="round"/>
+                                <!-- 尾巴条纹 -->
+                                <path d="M205 200 Q210 195 207 188" fill="none" stroke="#A06830" stroke-width="4" stroke-linecap="round" opacity="0.5"/>
+                                <path d="M213 175 Q218 168 215 162" fill="none" stroke="#A06830" stroke-width="4" stroke-linecap="round" opacity="0.5"/>
+                                <path d="M222 148 Q226 142 224 136" fill="none" stroke="#A06830" stroke-width="4" stroke-linecap="round" opacity="0.5"/>
+                            </g>
+
+                            <!-- 阴影 -->
+                            <ellipse cx="130" cy="272" rx="75" ry="12" fill="rgba(0,0,0,0.08)"/>
+
+                            <!-- 身体 -->
+                            <ellipse cx="130" cy="232" rx="68" ry="52" fill="url(#bodyGrad)" filter="url(#catShadow)"/>
+                            <!-- 身体条纹 -->
+                            <path d="M95 210 Q100 195 95 185" fill="none" stroke="#B87038" stroke-width="5" stroke-linecap="round" opacity="0.45"/>
+                            <path d="M112 205 Q117 188 112 178" fill="none" stroke="#B87038" stroke-width="5" stroke-linecap="round" opacity="0.4"/>
+                            <path d="M148 205 Q153 188 148 178" fill="none" stroke="#B87038" stroke-width="5" stroke-linecap="round" opacity="0.4"/>
+                            <path d="M165 210 Q170 195 165 185" fill="none" stroke="#B87038" stroke-width="5" stroke-linecap="round" opacity="0.45"/>
+                            <!-- 胸口白毛 -->
+                            <ellipse cx="130" cy="225" rx="32" ry="35" fill="url(#bellyGrad)"/>
+
+                            <!-- 前爪 -->
+                            <g>
+                                <ellipse cx="100" cy="268" rx="20" ry="12" fill="url(#pawGrad)"/>
+                                <ellipse cx="100" cy="271" rx="14" ry="7" fill="#FFF5EE" opacity="0.7"/>
+                                <ellipse cx="160" cy="268" rx="20" ry="12" fill="url(#pawGrad)"/>
+                                <ellipse cx="160" cy="271" rx="14" ry="7" fill="#FFF5EE" opacity="0.7"/>
+                                <!-- 肉垫 -->
+                                <circle cx="96" cy="273" r="3" fill="#FFB0C4" opacity="0.6"/>
+                                <circle cx="104" cy="273" r="3" fill="#FFB0C4" opacity="0.6"/>
+                                <circle cx="156" cy="273" r="3" fill="#FFB0C4" opacity="0.6"/>
+                                <circle cx="164" cy="273" r="3" fill="#FFB0C4" opacity="0.6"/>
+                            </g>
+                        </g>
+
+                        <!-- 头部组 -->
+                        <g class="cat-svghead">
+                            <!-- 耳朵 -->
+                            <path class="ear-left" d="M72 68 L55 18 L95 52 Z" fill="#E8C090" stroke="#D4A86C" stroke-width="1"/>
+                            <path class="ear-left" d="M76 60 L65 28 L90 50 Z" fill="url(#earInner)" opacity="0.8"/>
+                            <path class="ear-right" d="M188 68 L205 18 L165 52 Z" fill="#E8C090" stroke="#D4A86C" stroke-width="1"/>
+                            <path class="ear-right" d="M184 60 L195 28 L170 50 Z" fill="url(#earInner)" opacity="0.8"/>
+
+                            <!-- 头部主体 -->
+                            <ellipse cx="130" cy="105" rx="65" ry="58" fill="url(#headGrad)"/>
+
+                            <!-- 头部条纹（M型额纹） -->
+                            <path d="M95 72 L110 58 L120 72" fill="none" stroke="#B87038" stroke-width="3.5" stroke-linecap="round" opacity="0.5"/>
+                            <path d="M120 72 L130 55 L140 72" fill="none" stroke="#B87038" stroke-width="3.5" stroke-linecap="round" opacity="0.5"/>
+                            <path d="M140 72 L150 58 L165 72" fill="none" stroke="#B87038" stroke-width="3.5" stroke-linecap="round" opacity="0.5"/>
+
+                            <!-- 脸颊毛 -->
+                            <path d="M72 95 Q65 105 70 118" fill="none" stroke="#EABC78" stroke-width="2" opacity="0.4"/>
+                            <path d="M188 95 Q195 105 190 118" fill="none" stroke="#EABC78" stroke-width="2" opacity="0.4"/>
+
+                            <!-- 眼睛 -->
+                            <g id="catEyes">
+                                <!-- 左眼 -->
+                                <ellipse cx="105" cy="100" rx="16" ry="17" fill="white" stroke="#8B7355" stroke-width="1.5"/>
+                                <ellipse cx="105" cy="101" rx="13" ry="14" fill="url(#eyeGrad)"/>
+                                <ellipse cx="105" cy="102" rx="7" ry="9" fill="url(#pupilGrad)"/>
+                                <ellipse cx="102" cy="97" rx="4" ry="3.5" fill="white" opacity="0.85"/>
+                                <ellipse cx="109" cy="104" rx="2" ry="1.5" fill="white" opacity="0.5"/>
+                                <!-- 右眼 -->
+                                <ellipse cx="155" cy="100" rx="16" ry="17" fill="white" stroke="#8B7355" stroke-width="1.5"/>
+                                <ellipse cx="155" cy="101" rx="13" ry="14" fill="url(#eyeGrad)"/>
+                                <ellipse cx="155" cy="102" rx="7" ry="9" fill="url(#pupilGrad)"/>
+                                <ellipse cx="152" cy="97" rx="4" ry="3.5" fill="white" opacity="0.85"/>
+                                <ellipse cx="159" cy="104" rx="2" ry="1.5" fill="white" opacity="0.5"/>
+                            </g>
+
+                            <!-- 鼻子 -->
+                            <path id="catNose" d="M126 118 Q130 114 134 118 Q130 122 126 118 Z" fill="#FF9999" stroke="#E88888" stroke-width="0.5"/>
+
+                            <!-- 嘴巴 -->
+                            <g id="catMouth">
+                                <line x1="130" y1="122" x2="130" y2="128" stroke="#7A5C40" stroke-width="1.5" stroke-linecap="round"/>
+                                <path d="M120 128 Q125 133 130 128" fill="none" stroke="#7A5C40" stroke-width="1.5" stroke-linecap="round"/>
+                                <path d="M140 128 Q135 133 130 128" fill="none" stroke="#7A5C40" stroke-width="1.5" stroke-linecap="round"/>
+                            </g>
+
+                            <!-- 腮红 -->
+                            <circle cx="85" cy="115" r="12" fill="url(#cheekGrad)"/>
+                            <circle cx="175" cy="115" r="12" fill="url(#cheekGrad)"/>
+
+                            <!-- 胡须 -->
+                            <g stroke="#9B8060" stroke-width="1.2" stroke-linecap="round" opacity="0.4">
+                                <line x1="60" y1="112" x2="98" y2="118"/>
+                                <line x1="58" y1="122" x2="97" y2="124"/>
+                                <line x1="62" y1="132" x2="98" y2="128"/>
+                                <line x1="162" y1="118" x2="200" y2="112"/>
+                                <line x1="163" y1="124" x2="202" y2="122"/>
+                                <line x1="162" y1="128" x2="198" y2="132"/>
+                            </g>
+                        </g>
+                    </svg>
                 </div>
                 <!-- 情绪条 -->
                 <div class="cat-mood-bar">
@@ -2661,6 +2383,9 @@
         // 移除所有情绪 class
         stage.className = 'cat-agent-stage mood-' + mood;
 
+        // SVG 表情变化
+        updateSvgFace(mood);
+
         // 更新气泡
         const bubble = document.getElementById('moodBubble');
         bubble.textContent = data.bubble;
@@ -2675,6 +2400,109 @@
 
         // ZZZ 显示/隐藏
         document.getElementById('sleepZzz').style.opacity = mood === 'sleep' ? '1' : '0';
+    }
+
+    // SVG 猫咪表情系统
+    function updateSvgFace(mood) {
+        const eyesG = document.getElementById('catEyes');
+        const mouthG = document.getElementById('catMouth');
+        const noseG = document.getElementById('catNose');
+
+        // 保存原始眼睛HTML
+        if (!eyesG.dataset.original) {
+            eyesG.dataset.original = eyesG.innerHTML;
+        }
+        if (!mouthG.dataset.original) {
+            mouthG.dataset.original = mouthG.innerHTML;
+        }
+
+        switch(mood) {
+            case 'happy':
+                // 开心：弯弯的笑眼
+                eyesG.innerHTML = `
+                    <path d="M89 100 Q105 88 121 100" fill="none" stroke="#7A5C40" stroke-width="3.5" stroke-linecap="round"/>
+                    <path d="M139 100 Q155 88 171 100" fill="none" stroke="#7A5C40" stroke-width="3.5" stroke-linecap="round"/>
+                `;
+                // 大笑嘴巴
+                mouthG.innerHTML = `
+                    <line x1="130" y1="122" x2="130" y2="126" stroke="#7A5C40" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M117 126 Q123 137 130 137 Q137 137 143 126" fill="none" stroke="#7A5C40" stroke-width="2" stroke-linecap="round"/>
+                `;
+                break;
+            case 'sleep':
+                // 睡觉：闭眼横线
+                eyesG.innerHTML = `
+                    <line x1="89" y1="102" x2="121" y2="102" stroke="#7A5C40" stroke-width="3" stroke-linecap="round"/>
+                    <line x1="139" y1="102" x2="171" y2="102" stroke="#7A5C40" stroke-width="3" stroke-linecap="round"/>
+                `;
+                // 小嘴微张
+                mouthG.innerHTML = `
+                    <ellipse cx="130" cy="130" rx="4" ry="3" fill="#E88888" opacity="0.7"/>
+                `;
+                break;
+            case 'sad':
+                // 低落：下垂眉毛 + 半闭眼
+                eyesG.innerHTML = `
+                    <ellipse cx="105" cy="102" rx="14" ry="12" fill="white" stroke="#8B7355" stroke-width="1.5"/>
+                    <ellipse cx="105" cy="103" rx="11" ry="9" fill="url(#eyeGrad)"/>
+                    <ellipse cx="105" cy="104" rx="6" ry="7" fill="url(#pupilGrad)"/>
+                    <ellipse cx="103" cy="100" rx="3" ry="2.5" fill="white" opacity="0.7"/>
+                    <line x1="89" y1="88" x2="121" y2="92" stroke="#8B7355" stroke-width="2" stroke-linecap="round"/>
+                    <ellipse cx="155" cy="102" rx="14" ry="12" fill="white" stroke="#8B7355" stroke-width="1.5"/>
+                    <ellipse cx="155" cy="103" rx="11" ry="9" fill="url(#eyeGrad)"/>
+                    <ellipse cx="155" cy="104" rx="6" ry="7" fill="url(#pupilGrad)"/>
+                    <ellipse cx="153" cy="100" rx="3" ry="2.5" fill="white" opacity="0.7"/>
+                    <line x1="139" y1="92" x2="171" y2="88" stroke="#8B7355" stroke-width="2" stroke-linecap="round"/>
+                `;
+                // 嘴巴下弯
+                mouthG.innerHTML = `
+                    <line x1="130" y1="122" x2="130" y2="126" stroke="#7A5C40" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M120 130 Q125 126 130 130 Q135 126 140 130" fill="none" stroke="#7A5C40" stroke-width="1.5" stroke-linecap="round"/>
+                `;
+                break;
+            case 'daze':
+                // 发呆：正常但瞳孔上飘 + 一大一小
+                eyesG.innerHTML = `
+                    <ellipse cx="105" cy="100" rx="15" ry="16" fill="white" stroke="#8B7355" stroke-width="1.5"/>
+                    <ellipse cx="105" cy="99" rx="12" ry="13" fill="url(#eyeGrad)"/>
+                    <ellipse cx="105" cy="98" rx="6" ry="7" fill="url(#pupilGrad)"/>
+                    <ellipse cx="102" cy="95" rx="3.5" ry="3" fill="white" opacity="0.85"/>
+                    <ellipse cx="155" cy="100" rx="13" ry="14" fill="white" stroke="#8B7355" stroke-width="1.5"/>
+                    <ellipse cx="155" cy="99" rx="10" ry="11" fill="url(#eyeGrad)"/>
+                    <ellipse cx="155" cy="98" rx="5" ry="6" fill="url(#pupilGrad)"/>
+                    <ellipse cx="153" cy="96" rx="3" ry="2.5" fill="white" opacity="0.8"/>
+                `;
+                mouthG.innerHTML = eyesG.dataset.original ? mouthG.dataset.original : `
+                    <line x1="130" y1="122" x2="130" y2="128" stroke="#7A5C40" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M120 128 Q125 133 130 128" fill="none" stroke="#7A5C40" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M140 128 Q135 133 130 128" fill="none" stroke="#7A5C40" stroke-width="1.5" stroke-linecap="round"/>
+                `;
+                break;
+            case 'hungry':
+                // 饿肚子：亮闪闪大眼睛 + 张嘴
+                eyesG.innerHTML = `
+                    <ellipse cx="105" cy="100" rx="17" ry="18" fill="white" stroke="#8B7355" stroke-width="1.5"/>
+                    <ellipse cx="105" cy="101" rx="14" ry="15" fill="url(#eyeGrad)"/>
+                    <ellipse cx="105" cy="102" rx="8" ry="10" fill="url(#pupilGrad)"/>
+                    <ellipse cx="101" cy="96" rx="5" ry="4" fill="white" opacity="0.9"/>
+                    <ellipse cx="110" cy="105" rx="2.5" ry="2" fill="white" opacity="0.6"/>
+                    <ellipse cx="155" cy="100" rx="17" ry="18" fill="white" stroke="#8B7355" stroke-width="1.5"/>
+                    <ellipse cx="155" cy="101" rx="14" ry="15" fill="url(#eyeGrad)"/>
+                    <ellipse cx="155" cy="102" rx="8" ry="10" fill="url(#pupilGrad)"/>
+                    <ellipse cx="151" cy="96" rx="5" ry="4" fill="white" opacity="0.9"/>
+                    <ellipse cx="160" cy="105" rx="2.5" ry="2" fill="white" opacity="0.6"/>
+                `;
+                // 张嘴
+                mouthG.innerHTML = `
+                    <line x1="130" y1="122" x2="130" y2="126" stroke="#7A5C40" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M118 128 Q124 138 130 138 Q136 138 142 128" fill="#FFAAAA" stroke="#7A5C40" stroke-width="1.5" stroke-linecap="round"/>
+                `;
+                break;
+            default:
+                // 默认恢复原始
+                eyesG.innerHTML = eyesG.dataset.original;
+                mouthG.innerHTML = mouthG.dataset.original;
+        }
     }
 
     function showMoodText(text) {
