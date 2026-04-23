@@ -2328,13 +2328,13 @@
     <section class="gallery-section" id="gallery">
         <div class="section">
             <div class="section-header">
-                <h2>📸 突突的相册</h2>
+                <h2>✨ Q咪空间</h2>
                 <p>每一张都是绝美大片！</p>
                 <div class="divider"></div>
             </div>
             <div class="gallery-grid" id="galleryGrid">
                 <!-- 照片卡片1 -->
-                <div class="gallery-item">
+                <div class="gallery-item" data-id="default-0">
                     <img src="photos/012da3dd7d5288c00270836cf1558f6c.jpg" alt="偷窥的突突" onclick="openViewer(this.src)">
                     <button class="delete-btn" onclick="deleteGalleryItem(this)" title="删除照片">✕</button>
                     <div class="gallery-caption">
@@ -2344,7 +2344,7 @@
                     </div>
                 </div>
                 <!-- 照片卡片2 -->
-                <div class="gallery-item">
+                <div class="gallery-item" data-id="default-1">
                     <img src="photos/1a0fe439d94a39323908e45baea560b2.jpg" alt="睡到变形" onclick="openViewer(this.src)">
                     <button class="delete-btn" onclick="deleteGalleryItem(this)" title="删除照片">✕</button>
                     <div class="gallery-caption">
@@ -2354,7 +2354,7 @@
                     </div>
                 </div>
                 <!-- 照片卡片3 -->
-                <div class="gallery-item">
+                <div class="gallery-item" data-id="default-2">
                     <img src="photos/1dccc7ba0138ab00737cdef2ed34d965.jpg" alt="思考猫生" onclick="openViewer(this.src)">
                     <button class="delete-btn" onclick="deleteGalleryItem(this)" title="删除照片">✕</button>
                     <div class="gallery-caption">
@@ -2364,7 +2364,7 @@
                     </div>
                 </div>
                 <!-- 照片卡片4 -->
-                <div class="gallery-item">
+                <div class="gallery-item" data-id="default-3">
                     <img src="photos/2c7cdc166b1c677b07f2b0a89d345ef5.jpg" alt="卖萌时间" onclick="openViewer(this.src)">
                     <button class="delete-btn" onclick="deleteGalleryItem(this)" title="删除照片">✕</button>
                     <div class="gallery-caption">
@@ -2374,7 +2374,7 @@
                     </div>
                 </div>
                 <!-- 照片卡片5 -->
-                <div class="gallery-item">
+                <div class="gallery-item" data-id="default-4">
                     <img src="photos/330be70f783ca1f907abf2982bf8e284.jpg" alt="来吃一口" onclick="openViewer(this.src)">
                     <button class="delete-btn" onclick="deleteGalleryItem(this)" title="删除照片">✕</button>
                     <div class="gallery-caption">
@@ -2384,7 +2384,7 @@
                     </div>
                 </div>
                 <!-- 照片卡片6 -->
-                <div class="gallery-item">
+                <div class="gallery-item" data-id="default-5">
                     <img src="photos/81a5df48bffc8ae473fb2e050317938e.jpg" alt="铲屎官视角" onclick="openViewer(this.src)">
                     <button class="delete-btn" onclick="deleteGalleryItem(this)" title="删除照片">✕</button>
                     <div class="gallery-caption">
@@ -2394,7 +2394,7 @@
                     </div>
                 </div>
                 <!-- 照片卡片7 -->
-                <div class="gallery-item">
+                <div class="gallery-item" data-id="default-6">
                     <img src="photos/e9aa3baa8b5e75dcfcd054926dc1ad14.jpg" alt="暗中观察" onclick="openViewer(this.src)">
                     <button class="delete-btn" onclick="deleteGalleryItem(this)" title="删除照片">✕</button>
                     <div class="gallery-caption">
@@ -2404,7 +2404,7 @@
                     </div>
                 </div>
                 <!-- 照片卡片8 -->
-                <div class="gallery-item">
+                <div class="gallery-item" data-id="default-7">
                     <img src="photos/f6fda29647563418964f5e5c5a85f7bc.jpg" alt="伸懒腰" onclick="openViewer(this.src)">
                     <button class="delete-btn" onclick="deleteGalleryItem(this)" title="删除照片">✕</button>
                     <div class="gallery-caption">
@@ -2478,14 +2478,17 @@
         let years = now.getFullYear() - birth.getFullYear();
         let months = now.getMonth() - birth.getMonth();
         let days = now.getDate() - birth.getDate();
-        if (days < 0) months--;
+        if (days < 0) {
+            months--;
+            const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+            days += prevMonth.getDate();
+        }
         if (months < 0) { years--; months += 12; }
-        const totalMonths = years * 12 + months;
         const el = document.getElementById('ageDisplay');
         if (years >= 1) {
-            el.textContent = years + '岁' + (months > 0 ? months + '个月' : '');
+            el.textContent = years + '岁' + (months > 0 ? months + '个月' : '') + (days > 0 ? days + '天' : '');
         } else {
-            el.textContent = totalMonths + '个月' + (days >= 0 ? days + '天' : '');
+            el.textContent = (years * 12 + months) + '个月' + (days > 0 ? days + '天' : '');
         }
     }
     calcAge();
@@ -3049,7 +3052,11 @@
             }
         } catch(e) {}
     }
-    checkSession();
+    checkSession().then(() => {
+        loadCaptions();
+        loadAvatar();
+    });
+    renderTimeline(); // 时间轴不需要登录也能查看
 
     // ==================== 每日签到系统 ====================
     const CHECKIN_TABLE = 'check_ins';
@@ -3328,7 +3335,8 @@
                     image_data: base64,
                     uploader_name: currentUser.name,
                     uploader_id: currentUser.id,
-                    photo_time: new Date().toISOString()
+                    photo_time: new Date().toISOString(),
+                    is_gallery_photo: false
                 })
                 .select()
                 .single();
@@ -3483,21 +3491,24 @@
 
             if (error) throw error;
 
+            // 排除固定相册照片，只显示用户上传的照片
+            const uploadPhotos = (data || []).filter(p => !p.is_gallery_photo);
+
             const timeline = document.getElementById('userTimeline');
             timeline.innerHTML = '';
 
-            if (!data || data.length === 0) {
+            if (!uploadPhotos || uploadPhotos.length === 0) {
                 timeline.style.display = 'none';
                 return;
             }
             timeline.style.display = 'block';
 
             // 如果照片没有 photo_time 字段，用 created_at 兜底
-            data.forEach(p => {
+            uploadPhotos.forEach(p => {
                 if (!p.photo_time) p.photo_time = p.created_at;
             });
 
-            const groups = groupPhotosByDate(data);
+            const groups = groupPhotosByDate(uploadPhotos);
 
             groups.forEach(group => {
                 const groupEl = document.createElement('div');
@@ -3607,7 +3618,12 @@
 
     function deleteGalleryItem(btn) {
         const item = btn.parentElement;
-        showDeleteConfirm('确定要删除这张照片吗？', () => {
+        showDeleteConfirm('确定要删除这张照片吗？', async () => {
+            // 同步删除数据库记录
+            const dbId = item.getAttribute('data-id');
+            if (dbId && !dbId.startsWith('default-') && currentUser) {
+                try { await sb.from(GALLERY_TABLE).delete().eq('id', dbId); } catch(e) {}
+            }
             item.classList.add('deleting');
             setTimeout(() => {
                 item.remove();
@@ -3616,13 +3632,92 @@
         });
     }
 
-    // ==================== 文字编辑 ====================
+    // ==================== 固定相册数据（Supabase 云端同步） ====================
+    const GALLERY_TABLE = 'photos';
+    const defaultGalleryPhotos = [
+        { id: 'default-0', caption: '偷窥的突突', desc: '"喵？你在看什么？让我也看看！"', image_data: 'photos/012da3dd7d5288c00270836cf1558f6c.jpg' },
+        { id: 'default-1', caption: '睡到变形', desc: '"这个姿势最舒服了，不许吵我！"', image_data: 'photos/1a0fe439d94a39323908e45baea560b2.jpg' },
+        { id: 'default-2', caption: '思考猫生', desc: '"今天该拆沙发还是拆窗帘呢？"', image_data: 'photos/1dccc7ba0138ab00737cdef2ed34d965.jpg' },
+        { id: 'default-3', caption: '卖萌时间', desc: '"看什么看！没见过漂亮猫咪吗！"', image_data: 'photos/2c7cdc166b1c677b07f2b0a89d345ef5.jpg' },
+        { id: 'default-4', caption: '来吃一口', desc: '"那是我的！都是我的！别想抢！"', image_data: 'photos/330be70f783ca1f907abf2982bf8e284.jpg' },
+        { id: 'default-5', caption: '铲屎官视角', desc: '"你拍我干嘛？给我罐头再说！"', image_data: 'photos/81a5df48bffc8ae473fb2e050317938e.jpg' },
+        { id: 'default-6', caption: '暗中观察', desc: '"敌人在哪？本喵来侦查一下。"', image_data: 'photos/e9aa3baa8b5e75dcfcd054926dc1ad14.jpg' },
+        { id: 'default-7', caption: '伸懒腰', desc: '"伸个懒腰～又是想拆家的一天！"', image_data: 'photos/f6fda29647563418964f5e5c5a85f7bc.jpg' }
+    ];
+
+    // 首次编辑默认照片时，确保数据已入库
+    async function ensureGalleryInDb(index) {
+        const photo = defaultGalleryPhotos[index];
+        if (!photo || !photo.id.startsWith('default-')) return photo.id;
+        try {
+            if (!currentUser) return photo.id;
+            const { data, error } = await sb.from(GALLERY_TABLE).insert({
+                caption: photo.caption,
+                desc: photo.desc,
+                image_data: photo.image_data,
+                position: index,
+                uploader_name: '突突',
+                uploader_id: currentUser.id,
+                photo_time: new Date('2025-06-01').toISOString(),
+                is_gallery_photo: true
+            }).select().single();
+            if (!error && data) {
+                defaultGalleryPhotos[index].id = data.id;
+                // 更新 DOM 上的 data-id 属性
+                const items = document.querySelectorAll('#galleryGrid .gallery-item');
+                if (items[index]) items[index].setAttribute('data-id', data.id);
+                return data.id;
+            }
+        } catch(e) { console.error('入库失败:', e); }
+        return photo.id;
+    }
+
+    // 从 Supabase 加载固定相册文字
+    async function loadCaptions() {
+        try {
+            const { data, error } = await sb.from(GALLERY_TABLE)
+                .select('id, caption, desc, position')
+                .eq('is_gallery_photo', true)
+                .order('position', { ascending: true });
+            if (!error && data && data.length > 0) {
+                const items = document.querySelectorAll('#galleryGrid .gallery-item');
+                data.forEach((row) => {
+                    const idx = row.position;
+                    if (idx !== null && idx !== undefined && items[idx]) {
+                        const h4 = items[idx].querySelector('.gallery-caption h4');
+                        const p = items[idx].querySelector('.gallery-caption p');
+                        if (h4) h4.textContent = row.caption;
+                        if (p) p.textContent = row.desc || '';
+                        items[idx].setAttribute('data-id', row.id);
+                        defaultGalleryPhotos[idx].id = row.id;
+                        defaultGalleryPhotos[idx].caption = row.caption;
+                        defaultGalleryPhotos[idx].desc = row.desc || '';
+                    }
+                });
+                return;
+            }
+        } catch(e) {}
+        // 兜底：从 localStorage 恢复
+        const captions = JSON.parse(localStorage.getItem('tutuCaptions') || '{}');
+        const items = document.querySelectorAll('#galleryGrid .gallery-item');
+        items.forEach((item, idx) => {
+            if (captions[idx]) {
+                const h4 = item.querySelector('.gallery-caption h4');
+                const p = item.querySelector('.gallery-caption p');
+                if (h4) h4.textContent = captions[idx].title;
+                if (p) p.textContent = captions[idx].desc;
+            }
+        });
+    }
+
     function editCaption(btn) {
         const caption = btn.parentElement;
         const h4 = caption.querySelector('h4');
         const p = caption.querySelector('p');
         const currentTitle = h4.textContent;
         const currentDesc = p.textContent;
+        const galleryItem = btn.closest('.gallery-item');
+        const idx = Array.from(document.querySelectorAll('#galleryGrid .gallery-item')).indexOf(galleryItem);
 
         const overlay = document.createElement('div');
         overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.4);z-index:2000;display:flex;align-items:center;justify-content:center;animation:fadeIn 0.2s ease;';
@@ -3646,12 +3741,25 @@
         `;
         document.body.appendChild(overlay);
 
-        overlay.querySelector('#editSaveBtn').onclick = () => {
+        overlay.querySelector('#editSaveBtn').onclick = async () => {
             const newTitle = document.getElementById('editTitle').value.trim();
             const newDesc = document.getElementById('editDesc').value.trim();
             if (!newTitle) { document.getElementById('editTitle').style.borderColor = '#FF6B6B'; return; }
             h4.textContent = newTitle;
             p.textContent = newDesc;
+            defaultGalleryPhotos[idx].caption = newTitle;
+            defaultGalleryPhotos[idx].desc = newDesc;
+            // 同步到 Supabase
+            try {
+                const photoId = await ensureGalleryInDb(idx);
+                if (!photoId.startsWith('default-') && currentUser) {
+                    await sb.from(GALLERY_TABLE).update({ caption: newTitle, desc: newDesc }).eq('id', photoId);
+                }
+            } catch(e) { console.error('同步失败:', e); }
+            // 同时保存到 localStorage 兜底
+            const captions = JSON.parse(localStorage.getItem('tutuCaptions') || '{}');
+            captions[idx] = { title: newTitle, desc: newDesc };
+            localStorage.setItem('tutuCaptions', JSON.stringify(captions));
             overlay.remove();
             showToast('✅ 文字已更新');
         };
@@ -3659,22 +3767,48 @@
             if (e.target === overlay) overlay.remove();
         });
     }
+    // loadCaptions() 已在 checkSession().then() 中调用
 
-    function loadCaptions() {
-        const captions = JSON.parse(localStorage.getItem('tutuCaptions') || '{}');
-        const items = document.querySelectorAll('#galleryGrid .gallery-item');
-        items.forEach((item, idx) => {
-            if (captions[idx]) {
-                const h4 = item.querySelector('.gallery-caption h4');
-                const p = item.querySelector('.gallery-caption p');
-                if (h4) h4.textContent = captions[idx].title;
-                if (p) p.textContent = captions[idx].desc;
+    // ==================== 头像系统（Supabase 云端同步） ====================
+    const SETTINGS_TABLE = 'tutu_settings';
+    const AVATAR_KEY = 'tutu_avatar';
+
+    async function saveAvatar(base64) {
+        if (!currentUser) { localStorage.setItem('tutuAvatar', base64); return; }
+        try {
+            const { data: existing } = await sb.from(SETTINGS_TABLE).select('setting_key').eq('setting_key', AVATAR_KEY).single();
+            if (existing) {
+                const { error } = await sb.from(SETTINGS_TABLE).update({ setting_value: base64 }).eq('setting_key', AVATAR_KEY);
+                if (error) throw error;
+            } else {
+                const { error } = await sb.from(SETTINGS_TABLE).insert({ setting_key: AVATAR_KEY, setting_value: base64 });
+                if (error) throw error;
             }
-        });
+            localStorage.setItem('tutuAvatar', base64);
+        } catch(e) {
+            console.error('头像保存失败:', e);
+            localStorage.setItem('tutuAvatar', base64);
+        }
     }
-    loadCaptions();
 
-    // ==================== 头像上传 ====================
+    async function loadAvatar() {
+        try {
+            const { data, error } = await sb.from(SETTINGS_TABLE).select('setting_value').eq('setting_key', AVATAR_KEY).single();
+            if (!error && data && data.setting_value) {
+                const img = document.getElementById('heroAvatar');
+                if (img) img.src = data.setting_value;
+                localStorage.setItem('tutuAvatar', data.setting_value);
+                return;
+            }
+        } catch(e) {}
+        // 兜底：从 localStorage 恢复
+        const saved = localStorage.getItem('tutuAvatar');
+        if (saved) {
+            const img = document.getElementById('heroAvatar');
+            if (img) img.src = saved;
+        }
+    }
+
     function changeAvatar(input) {
         const file = input.files[0];
         if (!file) return;
@@ -3682,19 +3816,14 @@
         reader.onload = (e) => {
             const base64 = e.target.result;
             document.getElementById('heroAvatar').src = base64;
-            localStorage.setItem('tutuAvatar', base64);
+            saveAvatar(base64);
             showToast('🐱 头像已更换！');
         };
         reader.readAsDataURL(file);
         input.value = '';
     }
 
-    // 页面加载时恢复自定义头像
-    const savedTutuAvatar = localStorage.getItem('tutuAvatar');
-    if (savedTutuAvatar) {
-        const img = document.getElementById('heroAvatar');
-        if (img) img.src = savedTutuAvatar;
-    }
+    // loadAvatar() 已在 checkSession().then() 中调用
 
     function showDeleteConfirm(message, onConfirm) {
         const overlay = document.createElement('div');
