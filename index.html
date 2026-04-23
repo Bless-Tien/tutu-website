@@ -155,6 +155,34 @@
             position: relative;
             display: inline-block;
             margin-bottom: 24px;
+            cursor: pointer;
+        }
+
+        .avatar-upload-hint {
+            position: absolute;
+            bottom: 4px;
+            right: 4px;
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #FF9F43, #F57C00);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            box-shadow: 0 2px 8px rgba(255,159,67,0.5);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 10;
+            border: 2px solid white;
+        }
+
+        .avatar-container:hover .avatar-upload-hint {
+            opacity: 1;
+        }
+
+        .avatar-container:hover .avatar-inner {
+            filter: brightness(0.85);
         }
 
         .avatar-ring {
@@ -2103,12 +2131,14 @@
     <!-- ========== Hero ========== -->
     <section class="hero">
         <div class="hero-content">
-            <div class="avatar-container">
+            <div class="avatar-container" onclick="document.getElementById('avatarUploadInput').click()" title="点击更换头像">
                 <div class="avatar-ring">
                     <div class="avatar-inner">
-                        <img src="photos/tutu-avatar.png" alt="突突" style="width:140px;height:140px;object-fit:cover;border-radius:50%;">
+                        <img id="heroAvatar" src="photos/tutu-avatar.png" alt="突突" style="width:140px;height:140px;object-fit:cover;border-radius:50%;">
                     </div>
                 </div>
+                <div class="avatar-upload-hint">📷</div>
+                <input type="file" id="avatarUploadInput" accept="image/*" style="display:none;" onchange="changeAvatar(this)">
             </div>
             <h1>突突</h1>
             <p class="tagline">· 皇家拆家大队长 · 饭桶担当 · 无缺点之王 ·</p>
@@ -3643,6 +3673,28 @@
         });
     }
     loadCaptions();
+
+    // ==================== 头像上传 ====================
+    function changeAvatar(input) {
+        const file = input.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const base64 = e.target.result;
+            document.getElementById('heroAvatar').src = base64;
+            localStorage.setItem('tutuAvatar', base64);
+            showToast('🐱 头像已更换！');
+        };
+        reader.readAsDataURL(file);
+        input.value = '';
+    }
+
+    // 页面加载时恢复自定义头像
+    const savedTutuAvatar = localStorage.getItem('tutuAvatar');
+    if (savedTutuAvatar) {
+        const img = document.getElementById('heroAvatar');
+        if (img) img.src = savedTutuAvatar;
+    }
 
     function showDeleteConfirm(message, onConfirm) {
         const overlay = document.createElement('div');
