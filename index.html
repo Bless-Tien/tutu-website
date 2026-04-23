@@ -2730,15 +2730,41 @@
     // 初始化
     initCatAgent();
 
-    // ==================== 互动系统 ====================
+    // ==================== 互动系统（Supabase 云端同步） ====================
+    const INTERACT_KEY = 'tutu_interact_counts';
     let feedCount = 0, cleanCount = 0, petCount = 0;
 
-    // 从localStorage读取
+    // 从localStorage读取本地计数
     const saved = JSON.parse(localStorage.getItem('tutuInteract') || '{}');
     feedCount = saved.feed || 0;
     cleanCount = saved.clean || 0;
     petCount = saved.pet || 0;
-    updateCounters();
+
+    // 从Supabase加载云端计数并叠加
+    async function loadInteractCounts() {
+        try {
+            const { data, error } = await sb.from(SETTINGS_TABLE).select('setting_value').eq('setting_key', INTERACT_KEY).single();
+            if (!error && data && data.setting_value) {
+                const cloud = JSON.parse(data.setting_value);
+                // 取本地和云端的最大值，防止覆盖丢失
+                feedCount = Math.max(feedCount, cloud.feed || 0);
+                cleanCount = Math.max(cleanCount, cloud.clean || 0);
+                petCount = Math.max(petCount, cloud.pet || 0);
+                updateCounters();
+            }
+        } catch(e) {}
+    }
+
+    // 保存互动计数到Supabase + localStorage
+    async function saveInteractCounts() {
+        const counts = { feed: feedCount, clean: cleanCount, pet: petCount };
+        localStorage.setItem('tutuInteract', JSON.stringify(counts));
+        if (currentUser) {
+            try {
+                await sb.from(SETTINGS_TABLE).upsert({ setting_key: INTERACT_KEY, setting_value: JSON.stringify(counts) }, { onConflict: 'setting_key' });
+            } catch(e) {}
+        }
+    }
 
     function updateCounters() {
         const feedEl = document.getElementById('feedCount');
@@ -2763,6 +2789,7 @@
     function interactFeed(e) {
         feedCount++;
         updateCounters();
+        saveInteractCounts();
         animateCounter('feedCount');
         const emojis = ['🐟', '🥫', '🍖', '🐔', '🧶', '🥛', '😋', '🤤'];
         const texts = [
@@ -2786,6 +2813,7 @@
     function interactClean(e) {
         cleanCount++;
         updateCounters();
+        saveInteractCounts();
         animateCounter('cleanCount');
         const emojis = ['💩', '🧹', '🪣', '✨', '💨', '🧼'];
         const texts = [
@@ -2809,6 +2837,7 @@
     function interactPet(e) {
         petCount++;
         updateCounters();
+        saveInteractCounts();
         animateCounter('petCount');
         const emojis = ['❤️', '💖', '💕', '💗', '💓', '🥰', '✨', '⭐'];
         const texts = [
@@ -3055,6 +3084,7 @@
     checkSession().then(() => {
         loadCaptions();
         loadAvatar();
+        loadInteractCounts();
     });
     renderTimeline(); // 时间轴不需要登录也能查看
 
